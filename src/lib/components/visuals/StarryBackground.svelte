@@ -7,7 +7,9 @@
     showStarField = true,
     starsOpacity = 1,
     starCount = 80,
-    showShootingStars = true
+    showShootingStars = true,
+    skyObjects,
+    children
   } = $props();
 </script>
 
@@ -19,7 +21,6 @@
   {starsOpacity}
   {starCount}
   {showShootingStars}
->
-  <slot name="sky-objects" slot="sky-objects" />
-  <slot name="sea" slot="sea" />
-</BaseBackground>
+  {skyObjects}
+  {children}
+/>

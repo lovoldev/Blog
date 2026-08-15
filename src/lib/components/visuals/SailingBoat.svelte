@@ -23,6 +23,7 @@
   } = $props();
   
   // 主题颜色映射
+  /** @type {Record<string, string>} */
   const boatColors = {
     sunrise: '#0f172a',
     harbor: '#1e293b',

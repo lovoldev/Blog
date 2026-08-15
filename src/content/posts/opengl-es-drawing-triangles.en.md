@@ -45,7 +45,7 @@ In the previous section, we said that shaders exist as subsystems. To complete t
 
 ## How OpenGL ES Draws
 
-We铺垫ed a lot of knowledge above, all just to be able to draw a triangle. But up to now, many readers may still be confused because I've been building the framework without touching on any details. There's no helping it—there are too many new concepts to cover at this stage. To avoid confusion, I need to place concepts in their proper positions first, then slowly unfold their details. To help readers connect the above material once more, let's look at how the above concepts connect from the perspective of the OpenGL ES drawing workflow.
+We laid out a lot of knowledge above, all just to be able to draw a triangle. But up to now, many readers may still be confused because I've been building the framework without touching on any details. There's no helping it—there are too many new concepts to cover at this stage. To avoid confusion, I need to place concepts in their proper positions first, then slowly unfold their details. To help readers connect the above material once more, let's look at how the above concepts connect from the perspective of the OpenGL ES drawing workflow.
 
 1. Create a shader program to obtain the credential for accessing the shader office's service window
 2. Create vertex and fragment shaders, write and associate source code

@@ -1,5 +1,5 @@
 ---
-title: "使用OpenGLES在Androidd应用中画三角形"
+title: "使用OpenGLES在Android应用中画三角形"
 description: "在Android应用中使用OpenGLES的相关概念，以及怎么将这些概念串联起来，绘制一个三角形"
 date: 2023-07-23
 updated: 2026-04-24

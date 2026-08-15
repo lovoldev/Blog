@@ -23,6 +23,9 @@
     return () => clearTimeout(timer);
   });
 
+  /**
+   * @param {MouseEvent} event
+   */
   function handleNext(event) {
     event.preventDefault();
     goto(nextPath);
@@ -32,7 +35,7 @@
 <svelte:head>
   <title>{t.seo.projects.title}</title>
   <meta name="description" content={t.seo.projects.description} />
-  <link rel="canonical" href={`https://zevarc.com/${getLink(lang, 'projects')}`} />
+  <link rel="canonical" href={`https://zevarc.com/${getLink('projects', lang)}`} />
   <link rel="alternate" hreflang="en" href="https://zevarc.com/projects" />
   <link rel="alternate" hreflang="zh" href="https://zevarc.com/zh/projects" />
   <link rel="alternate" hreflang="x-default" href="https://zevarc.com/projects" />
@@ -47,9 +50,11 @@
     boatProps={{ theme: 'harbor', scale: 0.9, rock: true }}
     seaClass="sea-slot"
   >
-    <div slot="sky-objects" class="sunset">
-      <div class="sun"></div>
-    </div>
+    {#snippet skyObjects()}
+      <div class="sunset">
+        <div class="sun"></div>
+      </div>
+    {/snippet}
   </Scene>
 
   <section class="content" class:visible={visible}>

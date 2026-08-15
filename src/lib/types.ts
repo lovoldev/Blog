@@ -12,6 +12,12 @@ export interface Post extends PostMeta {
     slug: string
     lng: string
     component: any
+    url?: string
+    isNotes?: boolean
+    jsonLd?: any
+    hasAlt?: boolean
+    excerpt?: string
+    readTime?: string
 }
 
 export interface PostRecord {

@@ -6,13 +6,20 @@ export const dictionaries = {
   zh
 };
 
+/**
+ * @param {string} lang
+ */
 export function getDictionary(lang) {
-  return dictionaries[lang] || dictionaries.en;
+  return dictionaries[/** @type {keyof typeof dictionaries} */ (lang)] || dictionaries.en;
 }
 
 export const supportedLanguages = ['en', 'zh'];
 
-export function getLink(path,lang='en') {
+/**
+ * @param {string} path
+ * @param {string} [lang]
+ */
+export function getLink(path, lang='en') {
      return lang === 'en' ? path : `${lang}/${path}`
 }
 

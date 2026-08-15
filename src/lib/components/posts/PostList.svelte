@@ -4,8 +4,12 @@
   const { posts, readMoreLabel = 'Read More →' } = $props();
 
   let visible = $state(false);
-  let sectionEl;
+  /** @type {HTMLDivElement | null} */
+  let sectionEl = null;
 
+  /**
+   * @param {string} dateStr
+   */
   function formatDate(dateStr) {
     const date = new Date(dateStr);
     const year = date.getFullYear();

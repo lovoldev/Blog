@@ -1,13 +1,12 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  const { t, topics, contentVisible, nextLink, onExplore } = $props();
 
-  const { t, topics,contentVisible,nextLink } =$props();
-
-  const dispatch = createEventDispatcher();
-
+  /**
+   * @param {MouseEvent} event
+   */
   function handleExplore(event) {
     event.preventDefault();
-    dispatch("explore", event);
+    onExplore?.(event);
   }
 </script>
 
@@ -167,11 +166,21 @@
   }
 
   .arrow {
-    animation: 1.5s ease-in-out 0s infinite normal none running;
+    animation: arrow-bounce 1.5s ease-in-out infinite;
   }
 
   .cta-button:hover .arrow {
     transform: translateX(4px);
+    animation: none;
+  }
+
+  @keyframes arrow-bounce {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(6px);
+    }
   }
 
   @media (max-width: 768px) {

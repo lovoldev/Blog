@@ -8,6 +8,8 @@
    * @prop {number} starsOpacity - 星空透明度
    * @prop {number} starCount - 星星数量
    * @prop {boolean} showShootingStars - 是否显示流星
+   * @prop {Snippet} skyObjects - 天空中的物体（太阳/月亮等）
+   * @prop {Snippet} children - 海面内容（波浪/小船等）
    */
 
   import StarField from './StarField.svelte';
@@ -19,7 +21,9 @@
     showStarField = true,
     starsOpacity = 1,
     starCount = 50,
-    showShootingStars = false
+    showShootingStars = false,
+    skyObjects,
+    children
   } = $props();
 </script>
 
@@ -30,13 +34,17 @@
         <StarField count={starCount} opacity={starsOpacity} showShootingStars={showShootingStars} />
       </div>
     {/if}
-    <slot name="sky-objects" />
+    {#if skyObjects}
+      {@render skyObjects()}
+    {/if}
   </div>
 
   <div class="horizon-blend" style={`background: ${horizonGradient}`}></div>
 
   <div class="sea" style={`background: ${seaGradient}`}>
-    <slot name="sea" />
+    {#if children}
+      {@render children()}
+    {/if}
   </div>
 
   <div class="vignette"></div>

@@ -2,12 +2,12 @@ import { loadNotes, loadPosts } from '$lib/posts'
 
 export const prerender = true
 
-async function formatContent(lang) {
+async function formatContent(lang: string) {
     const posts = await loadPosts(lang)
     const notes = await loadNotes(lang)
     return posts.map(post => `posts/${post.slug}`).concat(notes.map(note => `posts/notes/${note.slug}`))
 }
-async function gen(target, alternate) {
+async function gen(target: string, alternate: string) {
     const siteUrl = 'https://zevarc.com';
 
     const fixUrls = ['', 'posts', 'projects']

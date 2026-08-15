@@ -1,10 +1,16 @@
 <script>
   import { page } from '$app/stores';
-  
+
+  let { overrideHref = undefined } = $props();
+
   // 获取当前语言
   let currentLang = $derived($page.url.pathname.startsWith('/zh') ? 'zh' : 'en');
   
   // 获取切换后的路径
+  /**
+   * @param {string} currentPath
+   * @param {string} targetLang
+   */
   function getSwitchPath(currentPath, targetLang) {
     if (targetLang === 'zh') {
       // 切换到中文 - 添加 /zh 前缀
@@ -18,7 +24,7 @@
     }
   }
   
-  let switchPath = $derived(getSwitchPath($page.url.pathname, currentLang === 'en' ? 'zh' : 'en'));
+  let switchPath = $derived(overrideHref ?? getSwitchPath($page.url.pathname, currentLang === 'en' ? 'zh' : 'en'));
 </script>
 
 <a href={switchPath} class="lang-switch">

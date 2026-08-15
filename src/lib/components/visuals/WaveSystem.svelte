@@ -15,6 +15,7 @@
   } = $props();
   
   // 波浪动画速度配置
+  /** @type {Record<string, { far: number; mid: number; near: number }>} */
   const waveSpeeds = {
     sunrise: { far: 25, mid: 18, near: 12 },
     harbor: { far: 30, mid: 22, near: 15 },
@@ -23,7 +24,11 @@
   };
   
   // 获取当前主题的波浪颜色
+  /**
+   * @param {string} t
+   */
   const getWaveColors = (t) => {
+    /** @type {Record<string, { far: string; mid: string; near: string }>} */
     const colors = {
       sunrise: {
         far: 'rgba(56, 189, 248, 0.2)',

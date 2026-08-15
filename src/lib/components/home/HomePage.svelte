@@ -28,6 +28,11 @@
 
   const nextLink = $derived(getLink('posts',lang));
 
+  /**
+   * @param {string} color1
+   * @param {string} color2
+   * @param {number} t
+   */
   function interpolateColor(color1, color2, t) {
     const c1 = hexToRgb(color1);
     const c2 = hexToRgb(color2);
@@ -37,6 +42,9 @@
     return `rgb(${r}, ${g}, ${b})`;
   }
 
+  /**
+   * @param {string} hex
+   */
   function hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
@@ -66,6 +74,9 @@
     const duration = 4000;
     const startTime = performance.now();
 
+    /**
+     * @param {number} currentTime
+     */
     function frame(currentTime) {
       const elapsed = currentTime - startTime;
       progress = Math.min(1, elapsed / duration);
@@ -126,7 +137,9 @@
     boatProps={{ theme: 'sunrise', opacity: boatOpacity, sailOut: boatSailing, rock: !boatSailing }}
     seaClass="sea-layer"
   >
-    <Sun slot="sky-objects" x={sunX} y={sunY} opacity={sunOpacity} />
+    {#snippet skyObjects()}
+      <Sun x={sunX} y={sunY} opacity={sunOpacity} />
+    {/snippet}
   </Scene>
 
   <Hero
@@ -134,7 +147,7 @@
     {contentVisible}
     {t}
     topics={t.hero.topics}
-    on:explore={handleExplore}
+    onExplore={handleExplore}
   />
 </div>
 

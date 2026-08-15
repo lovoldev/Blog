@@ -6,7 +6,10 @@
     seaGradient = 'linear-gradient(to bottom, #000814 0%, #001219 100%)',
     starsOpacity = 1,
     starCount = 50,
-    showStarField = true
+    showStarField = true,
+    showShootingStars = false,
+    skyObjects,
+    children
   } = $props();
 </script>
 
@@ -17,7 +20,7 @@
   {showStarField}
   {starsOpacity}
   {starCount}
->
-  <slot name="sky-objects" slot="sky-objects" />
-  <slot name="sea" slot="sea" />
-</BaseBackground>
+  {showShootingStars}
+  {skyObjects}
+  {children}
+/>

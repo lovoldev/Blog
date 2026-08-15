@@ -13,7 +13,7 @@
   let t = $derived(getDictionary(lang));
   let visible = $state(false);
 
-  const projectsPath = 'projects';
+  const projectsPath = $derived(lang === 'zh' ? '/zh/projects' : '/projects');
 
   onMount(() => {
     const timer = setTimeout(() => {
@@ -23,6 +23,9 @@
     return () => clearTimeout(timer);
   });
 
+  /**
+   * @param {MouseEvent} event
+   */
   function handleNext(event) {
     event.preventDefault();
     goto(projectsPath);
@@ -32,7 +35,7 @@
 <svelte:head>
   <title>{t.seo.posts.title}</title>
   <meta name="description" content={t.seo.posts.description} />
-  <link rel="canonical" href={`https://zevarc.com/${getLink(lang, 'posts')}`} />
+  <link rel="canonical" href={`https://zevarc.com/${getLink('posts', lang)}`} />
   <link rel="alternate" hreflang="en" href="https://zevarc.com/posts" />
   <link rel="alternate" hreflang="zh" href="https://zevarc.com/zh/posts" />
   <link rel="alternate" hreflang="x-default" href="https://zevarc.com/posts" />
@@ -48,7 +51,9 @@
     boatProps={{ theme: 'harbor', scale: 0.9, rock: true }}
     seaClass="sea-slot"
   >
-    <Moon slot="sky-objects" />
+    {#snippet skyObjects()}
+      <Moon />
+    {/snippet}
   </Scene>
 
   <main class="content" class:visible={visible}>

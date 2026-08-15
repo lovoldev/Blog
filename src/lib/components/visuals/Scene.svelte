@@ -7,27 +7,27 @@
    * @prop {object} boatProps - 传给 SailingBoat 的属性；设 { show: false } 可隐藏
    * @prop {boolean} showWave - 是否展示波浪
    * @prop {string} seaClass - 额外附加到海层容器的类名
+   * @prop {Snippet} skyObjects - 天空中的物体（太阳/月亮等）
    */
   import BaseBackground from './BaseBackground.svelte';
   import WaveSystem from './WaveSystem.svelte';
   import SailingBoat from './SailingBoat.svelte';
 
   let {
-    backgroundComponent = BaseBackground,
+    backgroundComponent: Background = BaseBackground,
     backgroundProps = {},
     waveProps = { theme: 'sunrise', shimmer: false, shimmerOpacity: 0.5, opacity: 1 },
     boatProps = { show: true, theme: 'sunrise', scale: 1, rock: true, opacity: 1 },
     showWave = true,
-    seaClass = ''
+    seaClass = '',
+    skyObjects
   } = $props();
 
   const showBoat = $derived(boatProps?.show !== false);
 </script>
 
-<svelte:component this={backgroundComponent} {...backgroundProps}>
-  <slot name="sky-objects" slot="sky-objects" />
-
-  <div slot="sea" class={`scene-sea ${seaClass}`}>
+<Background {...backgroundProps} {skyObjects}>
+  <div class={`scene-sea ${seaClass}`}>
     {#if showWave}
       <WaveSystem {...waveProps} />
     {/if}
@@ -35,10 +35,8 @@
     {#if showBoat}
       <SailingBoat {...boatProps} />
     {/if}
-
-    <slot name="sea" />
   </div>
-</svelte:component>
+</Background>
 
 <style>
   .scene-sea {

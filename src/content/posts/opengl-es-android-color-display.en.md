@@ -1,6 +1,6 @@
 ---
 title: Displaying Colors in Android Applications Using OpenGL ES
-description: Introduction to OpenGL ES workflow, configuring EGL environment, setting up OpenGL ES, and ultimately displaying a color
+description: "Introduction to OpenGL ES workflow, configuring the EGL environment, setting up OpenGL ES, and ultimately displaying a color."
 tags: ["Learning Guide","Android","OpenGLES"]
 date: 2023-05-09
 updated: 2025-04-15
@@ -23,7 +23,7 @@ OpenGL ES consists of a series of APIs, but this doesn't mean these APIs can be 
 
 ### Shader Preparation
 
-Shaders are important, but beginners don't need to spend too much精力 on them. Many effects can find ready-made code online, but how to assemble this code into a complete, runnable program isn't always clear. We only need to understand that shaders are a crucial part of OpenGL ES development—this is where the magic happens.
+Shaders are important, but beginners don't need to spend too much energy on them. Many effects can find ready-made code online, but how to assemble this code into a complete, runnable program isn't always clear. We only need to understand that shaders are a crucial part of OpenGL ES development—this is where the magic happens.
 
 ### Program Preparation
 

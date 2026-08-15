@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
 
   let visible = $state(false);
-  let sectionEl;
+  /** @type {HTMLDivElement | null} */
+  let sectionEl = null;
 
   let { projects } = $props();
 

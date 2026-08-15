@@ -1,6 +1,9 @@
 <script>
   let { href = '#', label = '', onClick } = $props();
 
+  /**
+   * @param {MouseEvent} event
+   */
   function handleClick(event) {
     if (onClick) {
       onClick(event);

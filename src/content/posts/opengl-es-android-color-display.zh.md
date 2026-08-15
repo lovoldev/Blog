@@ -1,6 +1,6 @@
 ---
-title: "使用OpenGLES在Androidd应用中显示颜色"
-description: "介绍了怎么OpenGLES工作流程，以及配置EGL环境，准备OpenGLES环境，并最终显示一个颜色"
+title: "使用OpenGLES在Android应用中显示颜色"
+description: "介绍OpenGLES工作流程，包括配置EGL环境、准备OpenGLES环境，并最终显示一个颜色。"
 tags: ["学习指南","Android","OpenGLES"]
 date: 2023-05-09
 updated: 2025-04-15
