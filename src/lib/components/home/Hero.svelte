@@ -44,14 +44,11 @@
 
 <style>
   .content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    z-index: 20;
     text-align: center;
     color: white;
-    z-index: 20;
-    padding: 0 20px;
+    padding: 20px;
     opacity: 0;
     transition: opacity 0.8s ease;
     max-width: 700px;
@@ -184,17 +181,43 @@
   }
 
   @media (max-width: 768px) {
+    .content {
+      padding: 12px;
+    }
+
     .title {
       letter-spacing: 0.05em;
+      font-size: clamp(2.5rem, 9vw, 3.5rem);
     }
 
     .etymology {
       gap: 8px;
+      margin: 16px 0;
     }
 
     .etym-item {
       padding: 6px 12px;
       font-size: 0.75rem;
+    }
+
+    .slogan {
+      margin: 14px 0;
+      font-size: 1rem;
+    }
+
+    .topics {
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .topic-tag {
+      padding: 5px 12px;
+      font-size: 0.8rem;
+    }
+
+    .description {
+      margin: 14px 0 22px;
+      font-size: 0.9rem;
     }
 
     .cta-button {

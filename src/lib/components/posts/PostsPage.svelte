@@ -46,9 +46,9 @@
 
   <Scene
     backgroundComponent={HarborBackground}
-    backgroundProps={{ showStarField: true, seaGradient: 'linear-gradient(to bottom, #1e3a5f, #0c1929)' }}
-    waveProps={{ theme: 'harbor', shimmer: true, shimmerOpacity: 0.35 }}
-    boatProps={{ theme: 'harbor', scale: 0.9, rock: true }}
+    backgroundProps={{ showStarField: true, seaGradient: 'linear-gradient(to bottom, #1f3049, #15263a)' }}
+    waveProps={{ theme: 'harbor', shimmer: true, shimmerOpacity: 0.2 }}
+    boatProps={{ theme: 'harbor', scale: 0.7, rock: true }}
     seaClass="sea-slot"
   >
     {#snippet skyObjects()}
@@ -74,6 +74,7 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
     font-family:
       "Inter",

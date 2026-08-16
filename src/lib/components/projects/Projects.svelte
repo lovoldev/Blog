@@ -76,7 +76,7 @@
   .projects-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 24px 80px;
+    padding: 0 24px 24px;
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -90,14 +90,14 @@
   .projects-list {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 16px;
   }
   
   .project-card {
     background: rgba(17, 24, 39, 0.6);
     border: 1px solid rgba(31, 41, 55, 0.5);
     border-radius: 16px;
-    padding: 28px;
+    padding: 20px 24px;
     opacity: 0;
     transform: translateY(20px);
     animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -122,22 +122,22 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
   }
   
   .project-meta {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
   }
   
   .project-year {
     font-size: .875rem;
     color: #fbbf24;
     font-family: JetBrains Mono, monospace;
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
   
   .project-title {
@@ -173,12 +173,12 @@
   
   .project-body {
     display: grid;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 4px;
+    margin-bottom: 12px;
   }
   
   .project-footer {
-    padding-top: 16px;
+    padding-top: 12px;
     border-top: 1px solid rgba(31, 41, 55, 0.5);
   }
   
@@ -200,11 +200,13 @@
   
   @media (max-width: 767px) {
     .project-card {
-      padding: 20px;
+      padding: 16px;
     }
     
     .project-header {
       flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
     }
     
     .project-links {

@@ -52,7 +52,7 @@
 
 <style>
   .theme-background {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -65,7 +65,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 60%;
+    height: 66%;
     transition: background 1.5s ease;
   }
 
@@ -80,11 +80,11 @@
 
   .horizon-blend {
     position: absolute;
-    top: 55%;
+    top: 58%;
     left: 0;
     width: 100%;
-    height: 15%;
-    filter: blur(8px);
+    height: 20%;
+    filter: blur(14px);
     z-index: 2;
     pointer-events: none;
   }
@@ -94,7 +94,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 45%;
+    height: 40%;
     transition: background 1.5s ease;
     overflow: hidden;
   }
@@ -105,7 +105,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.22) 100%);
     pointer-events: none;
     z-index: 15;
   }

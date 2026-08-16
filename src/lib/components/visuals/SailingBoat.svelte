@@ -87,8 +87,12 @@
   }
   
   @keyframes rock {
-    0%, 100% { transform: translateX(-50%) rotate(-2deg); }
-    50% { transform: translateX(-50%) rotate(2deg); }
+    0%, 100% {
+      transform: translateY(1px) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-2px) rotate(2deg);
+    }
   }
   
   @keyframes boat-sail-in {

@@ -16,13 +16,13 @@
     height: 100%;
     background: radial-gradient(
       circle at 30% 30%,
-      #fef3c7 0%,
-      #fde68a 50%,
-      transparent 70%
+      #f7f4ec 0%,
+      #ede7d8 60%,
+      transparent 75%
     );
     border-radius: 50%;
     box-shadow:
-      0 0 40px #fef3c74d,
-      0 0 80px #fef3c726;
+      0 0 50px rgba(247, 244, 236, 0.35),
+      0 0 110px rgba(247, 244, 236, 0.18);
   }
 </style>

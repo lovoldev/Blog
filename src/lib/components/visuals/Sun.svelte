@@ -16,9 +16,9 @@
   }
 
   .sun-core {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #fdf3e3, #f6d9a8);
     border-radius: 50%;
     position: relative;
     z-index: 2;
@@ -29,20 +29,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, transparent 70%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(246, 217, 168, 0.28) 0%, transparent 70%);
     border-radius: 50%;
     z-index: 1;
   }
 
   .sun-glow.animated {
-    animation: pulse 3s ease-in-out infinite;
+    animation: pulse 6s ease-in-out infinite;
   }
 
   @keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.7; }
   }
 
   @media (prefers-reduced-motion: reduce) {

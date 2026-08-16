@@ -21,10 +21,10 @@
   let sunX = $derived(50 + Math.sin(progress * Math.PI) * 35);
   let sunY = $derived(85 - progress * 65);
 
-  let skyColorTop = $derived(interpolateColor('#020617', '#1e3a5f', progress));
-  let skyColorBottom = $derived(interpolateColor('#0f172a', '#7dd3fc', progress));
-  let seaColorTop = $derived(interpolateColor('#000814', '#0369a1', progress));
-  let seaColorBottom = $derived(interpolateColor('#001219', '#0c1929', progress));
+  let skyColorTop = $derived(interpolateColor('#0b1526', '#1c2c46', progress));
+  let skyColorBottom = $derived(interpolateColor('#16233b', '#8aa0b8', progress));
+  let seaColorTop = $derived(interpolateColor('#081222', '#32536f', progress));
+  let seaColorBottom = $derived(interpolateColor('#0d1a2a', '#16293b', progress));
 
   const nextLink = $derived(getLink('posts',lang));
 
@@ -133,7 +133,7 @@
       starsOpacity,
       starCount: 50,
     }}
-    waveProps={{ theme: 'sunrise', shimmer: true, shimmerOpacity: progress * 0.5 }}
+    waveProps={{ theme: 'sunrise', shimmer: true, shimmerOpacity: progress * 0.28 }}
     boatProps={{ theme: 'sunrise', opacity: boatOpacity, sailOut: boatSailing, rock: !boatSailing }}
     seaClass="sea-layer"
   >
@@ -155,7 +155,11 @@
   .hero-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
 </style>
