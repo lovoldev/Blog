@@ -9,14 +9,14 @@
 		"deploy": "wrangler deploy"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "3.0.9",
-		"@sveltejs/kit": "2.55.0",
-		"@sveltejs/vite-plugin-svelte": "7.0.0",
-		"mdsvex": "^0.12.7",
-		"shiki": "^4.0.2",
-		"svelte": "5.53.12",
-		"svelte-check": "4.3.1",
-		"vite": "8.0.0",
-		"wrangler": "4.74.0"
+		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/kit": "^2.70.3",
+		"@sveltejs/vite-plugin-svelte": "^7.3.0",
+		"mdsvex": "^0.12.8",
+		"shiki": "^4.4.3",
+		"svelte": "^5.57.0",
+		"svelte-check": "^4.7.6",
+		"vite": "^8.2.2",
+		"wrangler": "^4.127.1"
 	}
 }
