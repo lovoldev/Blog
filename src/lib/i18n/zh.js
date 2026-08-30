@@ -120,7 +120,7 @@ export const zh = {
           '中文',
           '工具',
         ],
-        github: 'https://github.com/zevarc/PinyinK'
+        website: 'https://pinyfy.com'
       }
     ]
   },

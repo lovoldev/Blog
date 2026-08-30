@@ -121,7 +121,7 @@ export const en = {
           'Chinese',
           'Tools',
         ],
-        github: 'https://github.com/zevarc/PinyinK'
+        website: 'https://pinyfy.com'
       }
     ]
   },
