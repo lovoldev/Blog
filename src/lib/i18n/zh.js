@@ -23,7 +23,22 @@ export const zh = {
     noteTitle: '笔记',
     noteSubtitle: '所见，所思，所想的片段',
     readMore: '阅读全文 →',
+    readTime: '分钟阅读',
+    toc: '目录',
+    related: '相关文章',
+    latest: '最新文章',
     next: '前往码头',
+  },
+  nav: {
+    home: '首页',
+    posts: '博客',
+    projects: '项目',
+  },
+  search: {
+    title: '搜索',
+    placeholder: '搜索文章与笔记…',
+    empty: '没有找到结果',
+    hint: '搜索功能仅构建后可用（pnpm build）',
   },
   projects: {
     station: '第二站',
@@ -35,7 +50,7 @@ export const zh = {
       "title": "快传",
       "year": "2017",
       "description": "在无网络的情况下快速传输文件的Android应用",
-      "image": "/projects/fastair.png",
+      "image": "/projects/fastair.webp",
       "tags": [
         "Android",
         "WIFI P2P"

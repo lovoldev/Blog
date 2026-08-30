@@ -1,4 +1,4 @@
-import { loadPosts } from "$lib/posts";
+import { loadPosts, findRelated } from "$lib/posts";
 
 export function entries() {
     const posts = loadPosts('en')
@@ -7,5 +7,6 @@ export function entries() {
 
 export function load({params}) {
     const posts = loadPosts('en')
-    return { post: posts.find(post => post.slug === params.slug) }
+    const post = posts.find(post => post.slug === params.slug)
+    return { post, related: post ? findRelated(post, posts) : [] }
 }

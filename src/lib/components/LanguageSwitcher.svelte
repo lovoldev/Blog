@@ -13,8 +13,8 @@
    */
   function getSwitchPath(currentPath, targetLang) {
     if (targetLang === 'zh') {
-      // 切换到中文 - 添加 /zh 前缀
-      return '/zh' + currentPath;
+      // 首页 '/' 直接切到 '/zh'（避免尾斜杠，对应静态产物 zh.html）
+      return currentPath === '/' ? '/zh' : '/zh' + currentPath;
     } else {
       // 切换到英文 - 移除 /zh 前缀
       if (currentPath.startsWith('/zh')) {
@@ -34,23 +34,24 @@
 <style>
   .lang-switch {
     position: fixed;
-    top: 24px;
+    top: 20px;
     right: 24px;
     z-index: 1000;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.875rem;
+    padding: 6px 14px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-paper-line);
+    border-radius: 999px;
+    color: var(--color-ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
     backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(41, 55, 47, 0.08);
   }
   
   .lang-switch:hover {
-    background: rgba(251, 191, 36, 0.2);
-    border-color: rgba(251, 191, 36, 0.5);
-    color: #fbbf24;
+    border-color: var(--color-bud);
+    color: var(--color-bud);
   }
 </style>

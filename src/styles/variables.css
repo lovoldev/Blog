@@ -1,4 +1,7 @@
-/* Zevarc Design System - CSS Variables */
+/* ============================================================
+   Zevarc Design System v3 — 嫩芽 (Spring Bud)
+   淡淡青绿 + 嫩黄/暖棕点缀 · 春天万物复苏的生长感
+   ============================================================ */
 
 :root {
   /* ========== Layout ========== */
@@ -9,23 +12,19 @@
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
-  
-  /* Z-Index Scale */
+
   --z-bg: 0;
   --z-content: 20;
-  --z-boat: 10;
-  --z-vignette: 15;
   --z-nav: 1000;
-  
-  /* Container */
-  --content-max-width: 900px;
+
+  --content-max-width: 760px;
   --content-padding: 24px;
-  
+
   /* ========== Typography ========== */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
-  /* Font Sizes */
+  --font-serif: 'Fraunces', Georgia, 'Songti SC', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -33,87 +32,90 @@
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
   --text-3xl: 2rem;
-  --text-4xl: 2.5rem;
+  --text-4xl: 2.75rem;
   --text-5xl: 3.5rem;
-  
-  /* ========== Colors - Base ========== */
-  --color-bg-dark: #020617;
-  --color-bg-slate: #0f172a;
-  --color-bg-slate-2: #1e293b;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
 
-  /* Aliases used by components (light reading theme) */
+  /* ========== Palette (light — 嫩芽) ========== */
+  --color-paper: #f1f5ee;            /* 嫩绿白纸底 */
+  --color-paper-deep: #e5ece2;       /* 深一档纸 */
+  --color-paper-line: #d4ded1;       /* 淡绿线框 */
+  --color-ink: #29372f;              /* 深墨绿文字 */
+  --color-ink-soft: #5b6d62;         /* 次级文字 */
+  --color-ink-faint: #88978c;        /* 弱化文字 */
+
+  --color-bud: #5e8b74;              /* 主青绿（嫩芽） */
+  --color-bud-deep: #3f6a55;         /* 深青绿 */
+  --color-bud-soft: #b3cdbc;         /* 淡青绿 */
+  --color-bud-pale: #dbe8de;         /* 更淡青绿底 */
+
+  --color-sprout: #d6b35c;           /* 嫩黄（点缀） */
+  --color-sprout-deep: #b08a4f;      /* 暖棕（点缀） */
+  --color-sprout-pale: #f3ead4;      /* 嫩黄浅底 */
+
+  --grid-line: rgba(94, 139, 116, 0.07); /* 蓝图网格线 */
+
+  /* 品牌渐变（favicon 水印用，暗色模式另配） */
+  --grad-bud-a: #6f9c86;
+  --grad-bud-b: #b9d2c1;
+  --grad-bud-c: #e0c97f;
+
+  /* ========== Semantic aliases ========== */
+  --color-background: var(--color-paper);
+  --color-on-background: var(--color-ink);
+  --color-surface: var(--color-paper);
+  --color-on-surface: var(--color-ink);
+  --color-surface-container: var(--color-paper-deep);
+  --color-surface-container-low: #ecf1e9;
+  --color-surface-container-lowest: #f7f9f4;
+  --color-surface-container-high: #dfe7dc;
+  --color-surface-container-highest: #d9e2d5;
+  --color-surface-dim: #dfe7dc;
+  --color-surface-bright: #f7f9f4;
+  --color-surface-variant: var(--color-paper-deep);
+  --color-on-surface-variant: var(--color-ink-soft);
+
+  --color-primary: var(--color-bud);
+  --color-on-primary: #f5f8f4;
+  --color-primary-container: var(--color-bud-pale);
+  --color-on-primary-container: #24402f;
+  --color-primary-fixed: var(--color-bud-pale);
+  --color-on-primary-fixed: #24402f;
+  --color-primary-fixed-dim: var(--color-bud-soft);
+  --color-on-primary-fixed-variant: #3a5f4a;
+
+  --color-secondary: var(--color-sprout-deep);
+  --color-on-secondary: #fbf7ec;
+  --color-secondary-container: var(--color-sprout-pale);
+  --color-on-secondary-container: #4a3515;
+
+  --color-tertiary: var(--color-sprout);
+  --color-on-tertiary: #3a2c10;
+  --color-tertiary-container: var(--color-sprout-pale);
+  --color-on-tertiary-container: #4a3515;
+
+  --color-error: #b3261e;
+  --color-on-error: #ffffff;
+  --color-error-container: #f9dedc;
+  --color-on-error-container: #410e0b;
+
+  --color-outline: var(--color-paper-line);
+  --color-outline-variant: #c9d5c6;
+  --color-shadow: rgba(41, 55, 47, 0.14);
+  --color-scrim: rgba(20, 30, 25, 0.4);
+  --color-inverse-surface: #29372f;
+  --color-inverse-on-surface: #e2e9e2;
+  --color-inverse-primary: var(--color-bud-soft);
+
+  /* Aliases used by components */
   --primary: var(--color-primary);
-  --border-color: #e2e8f0;
-  --text-muted: #64748b;
+  --border-color: var(--color-paper-line);
+  --text-muted: var(--color-ink-soft);
 
-  --color-primary: rgb(70 103 49);
-  --color-surface-tint: rgb(70 103 49);
-  --color-on-primary: rgb(255 255 255);
-  --color-primary-container: rgb(198 238 170);
-  --color-on-primary-container: rgb(47 79 27);
-  --color-secondary: rgb(86 98 75);
-  --color-on-secondary: rgb(255 255 255);
-  --color-secondary-container: rgb(217 231 202);
-  --color-on-secondary-container: rgb(62 74 53);
-  --color-tertiary: rgb(56 102 102);
-  --color-on-tertiary: rgb(255 255 255);
-  --color-tertiary-container: rgb(187 235 235);
-  --color-on-tertiary-container: rgb(30 78 78);
-  --color-error: rgb(186 26 26);
-  --color-on-error: rgb(255 255 255);
-  --color-error-container: rgb(255 218 214);
-  --color-on-error-container: rgb(147 0 10);
-  --color-background: rgb(248 250 240);
-  --color-on-background: rgb(25 29 22);
-  --color-surface: rgb(248 250 240);
-  --color-on-surface: rgb(25 29 22);
-  --color-surface-variant: rgb(224 228 214);
-  --color-on-surface-variant: rgb(67 72 62);
-  --color-outline: rgb(116 121 109);
-  --color-outline-variant: rgb(196 200 187);
-  --color-shadow: rgb(0 0 0);
-  --color-scrim: rgb(0 0 0);
-  --color-inverse-surface: rgb(46 49 43);
-  --color-inverse-on-surface: rgb(240 242 231);
-  --color-inverse-primary: rgb(171 210 144);
-  --color-primary-fixed: rgb(198 238 170);
-  --color-on-primary-fixed: rgb(9 33 0);
-  --color-primary-fixed-dim: rgb(171 210 144);
-  --color-on-primary-fixed-variant: rgb(47 79 27);
-  --color-secondary-fixed: rgb(217 231 202);
-  --color-on-secondary-fixed: rgb(20 30 13);
-  --color-secondary-fixed-dim: rgb(189 203 175);
-  --color-on-secondary-fixed-variant: rgb(62 74 53);
-  --color-tertiary-fixed: rgb(187 235 235);
-  --color-on-tertiary-fixed: rgb(0 32 32);
-  --color-tertiary-fixed-dim: rgb(160 207 207);
-  --color-on-tertiary-fixed-variant: rgb(30 78 78);
-  --color-surface-dim: rgb(217 219 209);
-  --color-surface-bright: rgb(248 250 240);
-  --color-surface-container-lowest: rgb(255 255 255);
-  --color-surface-container-low: rgb(243 245 234);
-  --color-surface-container: rgb(237 239 228);
-  --color-surface-container-high: rgb(231 233 223);
-  --color-surface-container-highest: rgb(225 228 217);
-  
-  /* Brand Colors */
-  --color-sky-light: #7dd3fc;
-  --color-sky-dark: #38bdf8;
-  --color-sun: #fbbf24;
-  --color-sun-light: #fef3c7;
-  --color-wave: #38bdf8;
-  --color-wave-light: rgba(56, 189, 248, 0.5);
-  --color-wave-mid: rgba(56, 189, 248, 0.35);
-  --color-wave-far: rgba(56, 189, 248, 0.2);
-  
   /* ========== Transitions ========== */
   --transition-fast: 0.15s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.8s ease;
-  
+
   /* ========== Border Radius ========== */
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -122,76 +124,79 @@
   --radius-full: 9999px;
 }
 
-/* ========== Theme: Sunrise (Home) ========== */
-:root, [data-theme="sunrise"] {
-  --theme-sky-top: #020617;
-  --theme-sky-bottom: #0f172a;
-  --theme-sea-top: #000814;
-  --theme-sea-bottom: #001219;
-  --theme-sun-color: #fbbf24;
-  --theme-sun-glow: rgba(251, 191, 36, 0.4);
-  --theme-wave-1: rgba(56, 189, 248, 0.2);
-  --theme-wave-2: rgba(56, 189, 248, 0.35);
-  --theme-wave-3: rgba(56, 189, 248, 0.5);
-  --theme-boat: #0f172a;
-  --theme-vignette: rgba(0, 0, 0, 0.4);
-}
-
-/* ========== Theme: Harbor (Blog) ========== */
-[data-theme="harbor"] {
-  --theme-sky-top: #0f172a;
-  --theme-sky-bottom: #1e293b;
-  --theme-sea-top: #1e293b;
-  --theme-sea-bottom: #0f172a;
-  --theme-moon-color: #bae6fd;
-  --theme-moon-glow: rgba(186, 230, 253, 0.5);
-  --theme-wave-1: rgba(148, 163, 184, 0.15);
-  --theme-wave-2: rgba(148, 163, 184, 0.25);
-  --theme-wave-3: rgba(148, 163, 184, 0.35);
-  --theme-boat: #1e293b;
-  --theme-vignette: rgba(0, 0, 0, 0.3);
-  --theme-lighthouse: #f1f5f9;
-  --theme-lighthouse-light: #fbbf24;
-}
-
-/* ========== Theme: Sunset (Projects) ========== */
-[data-theme="sunset"] {
-  --theme-sky-top: #1e293b;
-  --theme-sky-bottom: #7c2d12;
-  --theme-sea-top: #1e293b;
-  --theme-sea-bottom: #0f172a;
-  --theme-sun-color: #fbbf24;
-  --theme-sun-glow: rgba(251, 191, 36, 0.4);
-  --theme-wave-1: rgba(148, 163, 184, 0.15);
-  --theme-wave-2: rgba(148, 163, 184, 0.25);
-  --theme-wave-3: rgba(148, 163, 184, 0.35);
-  --theme-boat: #1e293b;
-  --theme-vignette: rgba(0, 0, 0, 0.3);
-  --theme-dock: #a16207;
-  --theme-cargo: #a16207;
-}
-
-/* ========== Theme: Starry (About) ========== */
-[data-theme="starry"] {
-  --theme-sky-top: #020617;
-  --theme-sky-bottom: #0f172a;
-  --theme-sea-top: #0f172a;
-  --theme-sea-bottom: #020617;
-  --theme-star-color: #ffffff;
-  --theme-wave-1: rgba(148, 163, 184, 0.1);
-  --theme-wave-2: rgba(148, 163, 184, 0.15);
-  --theme-wave-3: rgba(148, 163, 184, 0.2);
-  --theme-boat: #1e293b;
-  --theme-vignette: rgba(0, 0, 0, 0.5);
-  --theme-accent: #8b5cf6;
-}
-
-/* ========== Responsive Breakpoints ========== */
-@media (max-width: 768px) {
+/* ========== Dark reading theme (follows system) ========== */
+@media (prefers-color-scheme: dark) {
   :root {
-    --content-padding: 16px;
-    --text-4xl: 2rem;
-    --text-5xl: 2.5rem;
+    --color-paper: #141d18;
+    --color-paper-deep: #1a2721;
+    --color-paper-line: #2b3b32;
+    --color-ink: #e2e9e2;
+    --color-ink-soft: #93a49a;
+    --color-ink-faint: #6d7d73;
+
+    --color-bud: #8fb89f;
+    --color-bud-deep: #6d9c84;
+    --color-bud-soft: #2c4236;
+    --color-bud-pale: #24362d;
+
+    --color-sprout: #d6b35c;
+    --color-sprout-deep: #c9a04f;
+    --color-sprout-pale: #332a16;
+
+    --color-background: var(--color-paper);
+    --color-on-background: var(--color-ink);
+    --color-surface: var(--color-paper);
+    --color-on-surface: var(--color-ink);
+    --color-surface-container: #1a2721;
+    --color-surface-container-low: #16211b;
+    --color-surface-container-lowest: #101812;
+    --color-surface-container-high: #20302a;
+    --color-surface-container-highest: #273931;
+    --color-surface-dim: #101812;
+    --color-surface-bright: #2b3b32;
+    --color-surface-variant: #22312a;
+    --color-on-surface-variant: var(--color-ink-soft);
+
+    --color-primary: var(--color-bud);
+    --color-on-primary: #10221a;
+    --color-primary-container: #24362d;
+    --color-on-primary-container: #cfe0d4;
+    --color-primary-fixed: #24362d;
+    --color-on-primary-fixed: #cfe0d4;
+    --color-primary-fixed-dim: #3a5f4a;
+    --color-on-primary-fixed-variant: #8fb89f;
+
+    --color-secondary: #d6b35c;
+    --color-on-secondary: #2a2108;
+    --color-secondary-container: #332a16;
+    --color-on-secondary-container: #ecd9ac;
+
+    --color-tertiary: #c9a04f;
+    --color-on-tertiary: #241c06;
+    --color-tertiary-container: #332a16;
+    --color-on-tertiary-container: #ecd9ac;
+
+    --color-error: #f2b8b5;
+    --color-on-error: #601410;
+    --color-error-container: #8c1d18;
+    --color-on-error-container: #f9dedc;
+
+    --color-outline: #2b3b32;
+    --color-outline-variant: #22312a;
+    --color-shadow: rgba(0, 0, 0, 0.5);
+    --color-scrim: rgba(0, 0, 0, 0.6);
+    --color-inverse-surface: #e2e9e2;
+    --color-inverse-on-surface: #141d18;
+    --color-inverse-primary: #5e8b74;
+
+    --primary: var(--color-primary);
+    --border-color: var(--color-paper-line);
+    --text-muted: var(--color-ink-soft);
+
+    --grid-line: rgba(143, 184, 159, 0.08);
+    --grad-bud-a: #8fb89f;
+    --grad-bud-b: #547765;
+    --grad-bud-c: #c9a04f;
   }
 }
 
@@ -203,3 +208,4 @@
     --transition-slow: 0s;
   }
 }
+

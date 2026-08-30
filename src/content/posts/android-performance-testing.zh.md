@@ -10,12 +10,12 @@ draft: false
 随着Android平台的发展，Android应用规模越来越大，类型也越来越多，为了保证应用的质量，性能测试的作用愈加凸显。在进行性能测试的过程中，我们会发现不同类型的应用关注点不尽一致，因此需要针对应用类型制定合适的指标。同时性能测试工具也在不断进化，很多性能测试工具在2024年已经过时。所以本篇将结合项目实际，聊一聊音视频应用的性能测试指标，并给出一些性能测试的工具推荐。
 ## 性能测试指标
 性能测试指标选择的原则是：以核心业务为参照，着重关注用户感知明显的部分，用户感知不强的部分则可以适当忽略。音频频应用的主要业务就是音视频处理，需要处理大量的数据，处理大量数据需要占用大量CPU和GPU的时间，占用大量内存。CPU和GPU一直以高负荷的状态工作，则会导致发热量增大，增加电量消耗。所以，音视频应用的性能指标就很明朗了。
-1. CPU占用率
-2. GPU占用率
-3. 内存占用率
-4. 比特率和帧率
-5. 温度变化
-6. 耗电量
+1.webp CPU占用率
+2.webp GPU占用率
+3.webp 内存占用率
+4.webp 比特率和帧率
+5.webp 温度变化
+6.webp 耗电量
 有了指标，接下来的主要任务就是获取这些指标数据。获取数据的方式有很多，大体可以分为应用内获取和应用外获取。应用内获取会比较直观，但是获取这些数据的过程中会影响到应用本身，影响指标数据。所以绝大部分情况下是采用应用外获取的方式。应用外获取最重要的工具就是ADB。
 ## ADB
 adb正如它名字蕴含的意义一样，它是PC和Android设备之间沟通的桥梁，是Android开发中极为重要的工具。我们不仅开发过程中需要用到它，性能测试更是少不了。通过它这个媒介，我们得以使用很多Android平台的工具，如本期性能测试的主角——`dumpsys`。`dumpsys`可以获取系统服务的很多信息。接下来我们将逐一介绍这些服务，并提供相应的Python脚本来解析这些服务数据，并将解析得到的数据保存在.`csv`文件中。
@@ -28,25 +28,25 @@ adb正如它名字蕴含的意义一样，它是PC和Android设备之间沟通�
 ### 连接测试机和PC
 很多人会疑问，我直接数据线插在手机上，配置好adb环境变量不就完成了吗，这有啥好展开说的。其实还真有，直接数据线连接，这种方式虽然简单快速，但是对于性能测试影响很大。首先是它无法得到电量消耗的数据。其次由于在充电状态，CPU和GPU的频率可能和使用电池时的频率差别很大，导致整个测试数据不可靠，所以需要采用无线连接的方式。
 无线连接也有两种方式可以选择。一种是Android11及以上的无线调试功能，这个功能我用着不是很稳定，况且对系统有限制，所以我使用第二种方法。第二种方法则是使用ADB WI-FI这个插件，可以直接在插件市场下载安装。下图就是它的详情图。
-![adb Wi-Fi](/images/posts/android-performance-testing/adb-wifi.png "ADB Wi-Fi")
+![adb Wi-Fi](/images/posts/android-performance-testing/adb-wifi.webp "ADB Wi-Fi")
 这个插件第一次使用需要先用数据线连接成功一次，点击屏幕右侧的Wi-Fi图标后页面会显示如下
-![adb Wi-Fi no device connect](/images/posts/android-performance-testing/adb-wifi-no-device-connected.png "ADB Wi-Fi no device connected")
+![adb Wi-Fi no device connect](/images/posts/android-performance-testing/adb-wifi-no-device-connected.webp "ADB Wi-Fi no device connected")
 它会显示两个设备，一个显示信号图标代表有线连接，一个显示Wi-Fi图标，代表无线连接。现在需要点击带有Wi-Fi图标设备右侧对应的connect按钮，开始连接。连接完成后，页面状态会变成Disconnect,显示如下
-![adb Wi-Fi connnected a device](/images/posts/android-performance-testing/adb-wifi-connected-a-device.png "adb Wi-Fi connnected a device")
+![adb Wi-Fi connnected a device](/images/posts/android-performance-testing/adb-wifi-connected-a-device.webp "adb Wi-Fi connnected a device")
 这时候就代表设备连接成功了。移除数据线，再次运行`adb devices`命令，会显示已经连接的设备。结果类似于下图这种
-![adb devices command](/images/posts/android-performance-testing/adb-devices-command.png "adb devices command")
+![adb devices command](/images/posts/android-performance-testing/adb-devices-command.webp "adb devices command")
 这种就代表adb准备完成了。
 ### Python脚本准备
 由于每个指标都是通过adb命令获取的，结果也会通过adb回显，执行一次命令得到一个指标数据。这些都是固定且重复的工作，可以将它们放到脚本中，我们先来分析一下脚本的结构。
 为了明确脚本任务，我们先来分析场景——在测试的某一时刻，脚本需要执行一个adb命令，命令执行完成后，读取输出，然后解析输出，最后将解析结果保存在csv文件中。
 这个过程有以下几个可变的内容：
-1. 命令。指标不同，命令自然也不同
-2. 输出。输出结果可能有很多行，也可能只有一个数
-3. 解析。由于结果不同，获取指标有效数据的方法自然也不同
+1.webp 命令。指标不同，命令自然也不同
+2.webp 输出。输出结果可能有很多行，也可能只有一个数
+3.webp 解析。由于结果不同，获取指标有效数据的方法自然也不同
 以下几个是固定的内容
-1. 命令执行
-2. 输出结果读取
-3. 解析结果保存
+1.webp 命令执行
+2.webp 输出结果读取
+3.webp 解析结果保存
 根据对这几个可变和不可变任务的分解，我们可以将任务分解为多个步骤，然后通过继承和重写实现。
 ```python
 class Record:
@@ -107,7 +107,7 @@ Toybox 0.8.9-android multicall binary (see toybox --help)
 
 usage: top [-Hhbq] [-k FIELD,] [-o FIELD,] [-s SORT] [-n NUMBER] [-m LINES] [-d SECONDS] [-p PID,] [-u USER,]
 
-Show process activity in real time.
+Show process activity in real time.webp
 
 -H	Show threads
 -h	Usage graphs instead of text
@@ -124,7 +124,7 @@ Show process activity in real time.
 -q	Quiet (no header lines)
 
 Cursor UP/DOWN or LEFT/RIGHT to move list, SHIFT LEFT/RIGHT to change sort,
-space to force update, R to reverse sort, Q to exit.
+space to force update, R to reverse sort, Q to exit.webp
 ```
 可以看到它提供了`-n`参数，命令将在循环`n`次数后退出。所以，我们只需要设置这个参数为1，就可以获取一次数据后马上退出，由此最终的命令就确定了——`adb shell top -n 1`。
 
@@ -155,21 +155,21 @@ GPU占用率，网上很多文章都是说通过`adb shell dumpsys gfxinfo xxx`�
 Snapdragon Profiler不仅能获取到CPU，GPU等多种信息，还有着丰富的配置选项，可以满足很多指标数据的获取。但是需要注意的是，有些配置项会随着当前所连接的设备的系统版本的不同而不同。如在我的测试中，Android 9就没有GPU Busy这一项，而Android 14的系统是显示完整的。
 本次示例中只要获取GPU的占用率，也就是GPU Busy这个
 打开Snapdragon Profiler，很多配置都是灰色的，需要首先连接设备。
-![Snapdragon profiler no device connect](/images/posts/android-performance-testing/snapdragon-profiler-no-device-connect.png "Snapdragon profiler no device connect")
+![Snapdragon profiler no device connect](/images/posts/android-performance-testing/snapdragon-profiler-no-device-connect.webp "Snapdragon profiler no device connect")
 点击`Start a Session`，如果此时连着Android设备，则会显示如下界面
-![Snapdragon profiler device avaliable](/images/posts/android-performance-testing/snapdragon-profiler-device-avaliable.png "Snapdragon profiler device avaliable")
+![Snapdragon profiler device avaliable](/images/posts/android-performance-testing/snapdragon-profiler-device-avaliable.webp "Snapdragon profiler device avaliable")
 点击`Connect`开始连接
-![Snapdragon profiler connect device](/images/posts/android-performance-testing/snapdragon-profiler-connect-device.png "Snapdragon profiler connect device")
+![Snapdragon profiler connect device](/images/posts/android-performance-testing/snapdragon-profiler-connect-device.webp "Snapdragon profiler connect device")
 等待几秒钟，如果一切顺利，下面三个选项则会变为可用
-![Snapdragon profiler avaliable options](/images/posts/android-performance-testing/snapdragon-profiler-avaliable-options.png "Snapdragon profiler avaliable options")
+![Snapdragon profiler avaliable options](/images/posts/android-performance-testing/snapdragon-profiler-avaliable-options.webp "Snapdragon profiler avaliable options")
 选择第二项Realtime performance analysis,在筛选框中输入包名来选取目标应用
-![Snapdragon profiler realtime performance analysis](/images/posts/android-performance-testing/snapdragon-profiler-realtime-performance-analysis.png "Snapdragon profiler realtime performance analysis")
+![Snapdragon profiler realtime performance analysis](/images/posts/android-performance-testing/snapdragon-profiler-realtime-performance-analysis.webp "Snapdragon profiler realtime performance analysis")
 然后在下面的框中双击对应的GPU Busy指标
-![Snapdragon profiler filter](/images/posts/android-performance-testing/snapdragon-profiler-filter.png "Snapdragon profiler filter")
+![Snapdragon profiler filter](/images/posts/android-performance-testing/snapdragon-profiler-filter.webp "Snapdragon profiler filter")
 页面的右上方就会实时绘制出当前应用的GPU占用率。
-![Snapdragon profiler gpu busy](/images/posts/android-performance-testing/snapdragon-profiler-gpu-busy.png "Snapdragon profiler gpu busy")
+![Snapdragon profiler gpu busy](/images/posts/android-performance-testing/snapdragon-profiler-gpu-busy.webp "Snapdragon profiler gpu busy")
 如果需要导出数据，则点击如下的按钮
-![Snapdragon profiler export](/images/posts/android-performance-testing/snapdragon-profiler-export.png "Snapdragon profiler export")
+![Snapdragon profiler export](/images/posts/android-performance-testing/snapdragon-profiler-export.webp "Snapdragon profiler export")
 然后导出为csv文件，可以直接使用里面的数据，也可用Python再做一次解析。
 
 ## 内存占用率
@@ -323,6 +323,6 @@ def main():
 ## 总结
 性能测试有很多指标项，不同的指标项需要不同的处理方法。CPU，内存，电池可以直接通过`dumpsys`命令获取。而GPU数据目前我没有找到没有合适的命令，目前比较完备的解决方案是使用第三方工具：Snapdragon Profiler，但这个工具也对低版本的系统有限制。Python用来处理这些数据是个很好的选择，不仅有字符串，正则这些很强的工具可以用，还可以异步处理，是个性能测试的好帮手。
 ## 参考链接
-1. [dumpsys](https://developer.android.com/tools/dumpsys)
-2. [snapdragon profiler](https://www.qualcomm.com/developer/software/snapdragon-profiler)
-3. [script](https://github.com/zevarc/RealtimePerformanceTest.git)
+1.webp [dumpsys](https://developer.android.com/tools/dumpsys)
+2.webp [snapdragon profiler](https://www.qualcomm.com/developer/software/snapdragon-profiler)
+3.webp [script](https://github.com/zevarc/RealtimePerformanceTest.git)

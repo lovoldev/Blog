@@ -10,18 +10,14 @@
   onMount(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            visible = true;
-          }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) visible = true;
         });
       },
       { threshold: 0.1 }
     );
 
-    if (sectionEl) {
-      observer.observe(sectionEl);
-    }
+    if (sectionEl) observer.observe(sectionEl);
 
     return () => observer.disconnect();
   });
@@ -30,28 +26,18 @@
 <div class="projects-container" bind:this={sectionEl} class:visible>
   <div class="projects-list">
     {#each projects as project, i}
-      <article 
-        class="project-card"
-        style="animation-delay: {i * 150}ms"
-      >
+      <article class="project-card" style="animation-delay: {i * 120}ms">
         <div class="project-header">
           <div class="project-meta">
             <span class="project-year">{project.year}</span>
             <h3 class="project-title">{project.title}</h3>
           </div>
           <div class="project-links">
-          {#if project.website}
-            <a href={project.website} class="project-link" target="_blank" rel="noopener">
-              <img src={project.image} alt="{project.title}"/>
-            </a>
+            {#if project.website}
+              <a class="project-link" href={project.website} target="_blank" rel="noopener">↗</a>
             {/if}
             {#if project.github}
-            <a href={project.github} class="project-link" target="_blank" rel="noopener">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
-              </svg>
-              Github
-            </a>
+              <a class="project-link" href={project.github} target="_blank" rel="noopener">github</a>
             {/if}
           </div>
         </div>
@@ -76,48 +62,49 @@
   .projects-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 24px 24px;
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(24px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
+
   .projects-container.visible {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   .projects-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .project-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-  }
-  
-  .project-card {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(31, 41, 55, 0.5);
-    border-radius: 16px;
-    padding: 20px 24px;
+    background: var(--color-surface-container-low);
+    border: 1px solid var(--color-paper-line);
+    border-radius: 14px;
+    padding: 22px 24px;
     opacity: 0;
-    transform: translateY(20px);
-    animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform: translateY(16px);
+    animation: cardAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     animation-delay: inherit;
-    transition: all 0.4s ease;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
   }
-  
+
   @keyframes cardAppear {
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
-  
+
   .project-card:hover {
-    border-color: #F59E0B;
-    box-shadow: 0 0 40px rgba(245, 158, 11, 0.1);
+    border-color: var(--color-bud-soft);
+    box-shadow: 0 8px 26px rgba(94, 139, 116, 0.14);
     transform: translateY(-2px);
   }
-  
+
   .project-header {
     display: flex;
     justify-content: space-between;
@@ -126,96 +113,98 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .project-meta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
-  
+
   .project-year {
-    font-size: .875rem;
-    color: #fbbf24;
-    font-family: JetBrains Mono, monospace;
-    margin-bottom: 0;
+    font-size: 0.75rem;
+    color: var(--color-bud);
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
   }
-  
+
   .project-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #f1f5f9;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-ink);
     margin: 0;
   }
-  
+
   .project-links {
     display: flex;
+    align-items: center;
     gap: 14px;
   }
-  
+
   .project-link {
-    display: flex;
-    align-items: center;
-    gap: 5px;
     font-size: 0.8rem;
-    color: #9CA3AF;
+    font-family: var(--font-mono);
+    color: var(--color-ink-soft);
+    border: none;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.2s;
   }
-  
+
   .project-link:hover {
-    color: #F59E0B;
+    color: var(--color-bud);
   }
-  
-  img {
-    width: 32px;
-    height: 32px;
-  }
-  
+
   .project-body {
-    display: grid;
-    gap: 4px;
-    margin-bottom: 12px;
+    flex: 1;
+    margin-bottom: 14px;
   }
-  
+
+  .project-body p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-ink-soft);
+  }
+
   .project-footer {
-    padding-top: 12px;
-    border-top: 1px solid rgba(31, 41, 55, 0.5);
+    padding-top: 14px;
+    border-top: 1px solid var(--color-paper-line);
   }
-  
+
   .tech-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
   }
-  
+
   .tech-tag {
-    font-family: 'JetBrains Mono', monospace;
-    border: 1px solid rgba(31, 41, 55, 0.5);
-    padding: 6px 14px;
-    background: #64748b4d;
-    color: #e2e8f0;
-    font-size: .875rem;
-    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--color-bud-pale);
+    color: var(--color-bud-deep);
   }
-  
+
   @media (max-width: 767px) {
+    .projects-list {
+      grid-template-columns: 1fr;
+    }
+
     .project-card {
-      padding: 16px;
+      padding: 18px 20px;
     }
-    
-    .project-header {
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    
-    .project-links {
-      width: 100%;
-      justify-content: flex-start;
-    }
-    
+
     .project-title {
       font-size: 1.15rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      animation: none;
+      opacity: 1;
+      transform: none;
     }
   }
 </style>

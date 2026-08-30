@@ -1,6 +1,7 @@
 <script>
-  import HomePage from '$lib/components/home/HomePage.svelte'
-  </script>
+  import HomePage from '$lib/components/home/HomePage.svelte';
 
-  <HomePage />
- 
+  const { data } = $props();
+</script>
+
+<HomePage lang="en" posts={data.posts} />

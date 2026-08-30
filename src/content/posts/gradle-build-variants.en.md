@@ -7,27 +7,27 @@ tags: [Gradle,Project]
 draft: false
 ---
 
-> Recently in project development, I encountered situations where I needed to depend on shared code to produce different libraries. I ran into some pitfalls, so I'm documenting my thoughts here in hopes of providing some guidance for readers who need it.
+> Recently in project development, I encountered situations where I needed to depend on shared code to produce different libraries.webp I ran into some pitfalls, so I'm documenting my thoughts here in hopes of providing some guidance for readers who need it.webp
 
-> The Gradle configuration scripts in this article use Kotlin. If you're using Groovy, the configuration approach may differ. If you're unsure how to modify the corresponding configuration items in Groovy, you can search for the configuration item name plus "Groovy" to find the corresponding configuration method.
+> The Gradle configuration scripts in this article use Kotlin.webp If you're using Groovy, the configuration approach may differ.webp If you're unsure how to modify the corresponding configuration items in Groovy, you can search for the configuration item name plus "Groovy" to find the corresponding configuration method.webp
 
 ## The Relationship Between Build Types, Product Flavors, and Build Variants
 
-As a build tool, Gradle's **primary purpose is to help developers manage resources**. Developers achieve different functionalities and produce different products through various combinations of resources. In this process, some common resources have been abstracted out and are required by all products. In this case, as a build tool, Gradle should naturally provide corresponding support, which is why `Build types`, `Product flavors`, and `Build variants` were introduced.
+As a build tool, Gradle's **primary purpose is to help developers manage resources**.webp Developers achieve different functionalities and produce different products through various combinations of resources.webp In this process, some common resources have been abstracted out and are required by all products.webp In this case, as a build tool, Gradle should naturally provide corresponding support, which is why `Build types`, `Product flavors`, and `Build variants` were introduced.webp
 
-First, for any product, most development and release versions will have some differences—log information, backdoor functionality, validation logic may all differ. Gradle provides `Build types` for this situation.
+First, for any product, most development and release versions will have some differences—log information, backdoor functionality, validation logic may all differ.webp Gradle provides `Build types` for this situation.webp
 
-As product development progresses, you might launch a membership version. At this point, products not only differ between development and release, but also in implementation. So Gradle provides `Product flavor` for this situation.
+As product development progresses, you might launch a membership version.webp At this point, products not only differ between development and release, but also in implementation.webp So Gradle provides `Product flavor` for this situation.webp
 
-Of course, whether it's a membership version or a regular version, they all have development, testing, and release workflows. Each workflow combined with each product needs a configuration method, which is why `Build variants` exist. It's a combination of the first two items, providing more granular control.
+Of course, whether it's a membership version or a regular version, they all have development, testing, and release workflows.webp Each workflow combined with each product needs a configuration method, which is why `Build variants` exist.webp It's a combination of the first two items, providing more granular control.webp
 
-Their combination creates endless possibilities. In the following sections, I'll explain the use cases of these tools based on my practical experience.
+Their combination creates endless possibilities.webp In the following sections, I'll explain the use cases of these tools based on my practical experience.webp
 
 ## Build Types
 
-**Build types are a configuration layer for processes like development, testing, and release. Their purpose is to provide different configuration information for these stages, so use them when resource items are basically the same.** For example, in app development, different stages typically have different API endpoints. API endpoints are a type of configuration item that varies with the stage, so `build type` can excellently handle this task. Let's use an example to briefly explain how `build types` work.
+**Build types are a configuration layer for processes like development, testing, and release.webp Their purpose is to provide different configuration information for these stages, so use them when resource items are basically the same.** For example, in app development, different stages typically have different API endpoints.webp API endpoints are a type of configuration item that varies with the stage, so `build type` can excellently handle this task.webp Let's use an example to briefly explain how `build types` work.webp
 
-First, we need a project. The original directory structure is as follows:
+First, we need a project.webp The original directory structure is as follows:
 
 ```shell
 │  build.gradle.kts   	// referred to as project build file below
@@ -47,7 +47,7 @@ First, we need a project. The original directory structure is as follows:
 
 ### Default Build Types
 
-Gradle has already added `debug` and `release` build types by default, representing development and release stage configurations respectively. In the app build file, we can view the default configuration generated by Android Studio:
+Gradle has already added `debug` and `release` build types by default, representing development and release stage configurations respectively.webp In the app build file, we can view the default configuration generated by Android Studio:
 
 ```kotlin
 android {
@@ -65,22 +65,22 @@ android {
 }
 ```
 
-`debug` and `release` have the same configuration items but with different values. For example:
+`debug` and `release` have the same configuration items but with different values.webp For example:
 
-1. `isDebuggable=true` enables the debugger in `debug` builds
-2. `isMinifyEnabled=false` disables code shrinking, resulting in larger APK size; setting it to `true` removes unused classes and methods—be careful when using reflection
-3. `isShrinkResources=false` disables resource shrinking, keeping unused resources in the APK
-4. `versionNameSuffix+=".debug"` helps identify the build mode from version information
-5. `applicationIdSuffix+=".debug"` configures application ID suffix, allowing multiple build variants to be installed on the same device
-6. `addManifestPlaceholders(mapOf("key" to "value"))` adds configuration to `AndroidManifest.xml`
+1.webp `isDebuggable=true` enables the debugger in `debug` builds
+2.webp `isMinifyEnabled=false` disables code shrinking, resulting in larger APK size; setting it to `true` removes unused classes and methods—be careful when using reflection
+3.webp `isShrinkResources=false` disables resource shrinking, keeping unused resources in the APK
+4.webp `versionNameSuffix+=".debug"` helps identify the build mode from version information
+5.webp `applicationIdSuffix+=".debug"` configures application ID suffix, allowing multiple build variants to be installed on the same device
+6.webp `addManifestPlaceholders(mapOf("key" to "value"))` adds configuration to `AndroidManifest.xml`
 
-And so on. For more configuration items, see the [official documentation](https://developer.android.google.cn/reference/tools/gradle-api/7.3/com/android/build/api/dsl/BuildType).
+And so on.webp For more configuration items, see the [official documentation](https://developer.android.google.cn/reference/tools/gradle-api/7.3/com/android/build/api/dsl/BuildType).webp
 
-Of course, besides development and release stages, we may also need a testing stage configuration, which requires us to create it ourselves.
+Of course, besides development and release stages, we may also need a testing stage configuration, which requires us to create it ourselves.webp
 
 ### Creating a New Build Type
 
-In the `buildTypes` block, we can use the `create` method to create a new `Build type`. The new `Build type` is exactly the same as the two default ones and has all the configuration items mentioned above available for use.
+In the `buildTypes` block, we can use the `create` method to create a new `Build type`.webp The new `Build type` is exactly the same as the two default ones and has all the configuration items mentioned above available for use.webp
 
 ```kotlin
 android {
@@ -102,23 +102,23 @@ android {
 }
 ```
 
-After creation, Android Studio will prompt you to sync the project at the bottom of the file tab. After clicking `Sync Now` and syncing completes, you can find the `Build Variants` tool window in the sidebar. At this point, you'll see an additional `alpha` build option in `Active Build Variant`.
+After creation, Android Studio will prompt you to sync the project at the bottom of the file tab.webp After clicking `Sync Now` and syncing completes, you can find the `Build Variants` tool window in the sidebar.webp At this point, you'll see an additional `alpha` build option in `Active Build Variant`.webp
 
-![build variant preview](/images/posts/gradle-build-variants/build-variant-preview.png)
+![build variant preview](/images/posts/gradle-build-variants/build-variant-preview.webp)
 
-This tells you that you can now release packages for the `alpha` environment.
+This tells you that you can now release packages for the `alpha` environment.webp
 
-As you can see, most configuration items are set up to differentiate environments. However, I think these configuration items are not sufficient for app development at this point. Developers may need more visual differentiation, such as app icons and app names, which require introducing new rules.
+As you can see, most configuration items are set up to differentiate environments.webp However, I think these configuration items are not sufficient for app development at this point.webp Developers may need more visual differentiation, such as app icons and app names, which require introducing new rules.webp
 
 ### Using Source Sets
 
-Besides providing configuration items for environment setup, Gradle also provides source set functionality for differentiating resources. Source sets provide the ability to configure individual `Build types`. Typically, a module creates a `main` directory under the `src` directory to store code and resources, which we call the main source set. When we want `Build types` to differ and configure different resources, we can **create variant directories with the same name as the `Build type` under the `src` directory**. These are called variant source sets. Their structure is identical and can store code and resources unique to the variant. During compilation, Gradle combines the resources and code from both source sets as if they were in the same directory. For example, if I want the app to display different app names or icons in different environments, I can use the source set feature.
+Besides providing configuration items for environment setup, Gradle also provides source set functionality for differentiating resources.webp Source sets provide the ability to configure individual `Build types`.webp Typically, a module creates a `main` directory under the `src` directory to store code and resources, which we call the main source set.webp When we want `Build types` to differ and configure different resources, we can **create variant directories with the same name as the `Build type` under the `src` directory**.webp These are called variant source sets.webp Their structure is identical and can store code and resources unique to the variant.webp During compilation, Gradle combines the resources and code from both source sets as if they were in the same directory.webp For example, if I want the app to display different app names or icons in different environments, I can use the source set feature.webp
 
-1. First, determine the target module—in the example, the target module is `app`
-2. Then, navigate to the target module's `src` directory
-3. Using `src` as the parent directory, create folders that match the `Build type` names one-to-one—for example, for the `debug` environment, create a `debug` folder
-4. Following the `main` directory structure, configure the resources you want to differentiate
-5. Sync
+1.webp First, determine the target module—in the example, the target module is `app`
+2.webp Then, navigate to the target module's `src` directory
+3.webp Using `src` as the parent directory, create folders that match the `Build type` names one-to-one—for example, for the `debug` environment, create a `debug` folder
+4.webp Following the `main` directory structure, configure the resources you want to differentiate
+5.webp Sync
 
 Below is an example of modifying the app name for `alpha` and `release` modes:
 
@@ -140,16 +140,16 @@ app
     │      │      strings.xml
 ```
 
-`strings.xml` defines three strings with the same keys but different values. Below are the runtime effects for the `alpha` and `release` environments.
+`strings.xml` defines three strings with the same keys but different values.webp Below are the runtime effects for the `alpha` and `release` environments.webp
 
-![build alpha](/images/posts/gradle-build-variants/build-alpha.png)
-![build release](/images/posts/gradle-build-variants/build-release.png)
+![build alpha](/images/posts/gradle-build-variants/build-alpha.webp)
+![build release](/images/posts/gradle-build-variants/build-release.webp)
 
-Of course, besides regular resources, code can also be configured. Simply add a `java` directory based on the above directory structure, then add files in the corresponding package—just like writing them directly in the package under the `main` directory. The only difference is that these classes only take effect when the target build type matches the directory.
+Of course, besides regular resources, code can also be configured.webp Simply add a `java` directory based on the above directory structure, then add files in the corresponding package—just like writing them directly in the package under the `main` directory.webp The only difference is that these classes only take effect when the target build type matches the directory.webp
 
 ## Product Flavors
 
-Most of the time, `Build types` are sufficient. However, when we need two or more different types of products but want to share most resources, it's time to consider `Product flavors`. If `Build types` handle dynamic configuration, `Product flavors` handle static configuration. As the name suggests, it's used to differentiate products.
+Most of the time, `Build types` are sufficient.webp However, when we need two or more different types of products but want to share most resources, it's time to consider `Product flavors`.webp If `Build types` handle dynamic configuration, `Product flavors` handle static configuration.webp As the name suggests, it's used to differentiate products.webp
 
 Let's first look at the common configuration items:
 
@@ -167,11 +167,11 @@ android{
 }
 ```
 
-In the code block above, the `defaultConfig` block is essentially equivalent to a `Product flavor`, and its contents are common configuration items. As you can see, if you reset all of these, it can completely be seen as a new app.
+In the code block above, the `defaultConfig` block is essentially equivalent to a `Product flavor`, and its contents are common configuration items.webp As you can see, if you reset all of these, it can completely be seen as a new app.webp
 
-In the past, I often wondered why both `Build types` and `Product flavors` were provided when they share many similarities. It wasn't until I encountered problems in actual work that I slowly understood these things.
+In the past, I often wondered why both `Build types` and `Product flavors` were provided when they share many similarities.webp It wasn't until I encountered problems in actual work that I slowly understood these things.webp
 
-In previous work, I needed to provide two SDKs with different functionality types based on one set of `C++` code and two sets of interfaces. Initially, my approach was crude—just create another `module`. But during actual development, I also needed to share some `Kotlin` code for feature reuse. Most of this code was `internal`, so to share code, I completely broke the previous encapsulation, exposing many classes that shouldn't have been exposed. The more I thought about it, the more wrong it felt. Eventually, by studying Gradle's features, I started trying to solve this problem using the `Product flavors` approach.
+In previous work, I needed to provide two SDKs with different functionality types based on one set of `C++` code and two sets of interfaces.webp Initially, my approach was crude—just create another `module`.webp But during actual development, I also needed to share some `Kotlin` code for feature reuse.webp Most of this code was `internal`, so to share code, I completely broke the previous encapsulation, exposing many classes that shouldn't have been exposed.webp The more I thought about it, the more wrong it felt.webp Eventually, by studying Gradle's features, I started trying to solve this problem using the `Product flavors` approach.webp
 
 To better describe the actual problems encountered, our project directory structure has changed to this:
 
@@ -202,18 +202,18 @@ To better describe the actual problems encountered, our project directory struct
 │      │  │              Test.kt
 ```
 
-I created a new `sdk` module. Next, we need to work on the sdk build file.
+I created a new `sdk` module.webp Next, we need to work on the sdk build file.webp
 
 ### Creating a Product Flavor
 
-The first step in creating a `Product flavor` is to use `flavorDimensions.add("sdk")` to specify a dimension for the `Product flavor`—essentially giving it a name. This step is important, otherwise you'll get a compilation error:
+The first step in creating a `Product flavor` is to use `flavorDimensions.add("sdk")` to specify a dimension for the `Product flavor`—essentially giving it a name.webp This step is important, otherwise you'll get a compilation error:
 
 `
-Error: All flavors must now belong to a named flavor dimension.
-The flavor 'flavor_name' is not assigned to a flavor dimension.
+Error: All flavors must now belong to a named flavor dimension.webp
+The flavor 'flavor_name' is not assigned to a flavor dimension.webp
 `
 
-After naming it, we can use the `productFlavors` block to create `Product flavors`.
+After naming it, we can use the `productFlavors` block to create `Product flavors`.webp
 
 ```kotlin
 productFlavors {
@@ -226,24 +226,24 @@ productFlavors {
 }
 ```
 
-Besides specifying the `dimension`, other items can override `defaultConfig` content as needed, similar to `Build types`. The problem arises when the `app` module references the `sdk` module.
+Besides specifying the `dimension`, other items can override `defaultConfig` content as needed, similar to `Build types`.webp The problem arises when the `app` module references the `sdk` module.webp
 
 ### Dependency Configuration
 
-Without `Product flavors` configured, we can reference a local module directly with `implementation(project(":sdk"))`. But after creating `Product flavors`, if you try again, it will error:
+Without `Product flavors` configured, we can reference a local module directly with `implementation(project(":sdk"))`.webp But after creating `Product flavors`, if you try again, it will error:
 
 ```shell
-Could not determine the dependencies of task ':app:lintVitalReportRelease'.
+Could not determine the dependencies of task ':app:lintVitalReportRelease'.webp
 
-> Could not resolve all task dependencies for configuration ':app:releaseRuntimeClasspath'.
+> Could not resolve all task dependencies for configuration ':app:releaseRuntimeClasspath'.webp
 
-   > Could not resolve project :sdk.
+   > Could not resolve project :sdk.webp
 
      Required by:
 
          project :app
 
-      > The consumer was configured to find a component for use during runtime, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.1.0', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm'. However we cannot choose between the following variants of project :sdk:
+      > The consumer was configured to find a component for use during runtime, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.1.0', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm'.webp However we cannot choose between the following variants of project :sdk:
 
           - helloReleaseRuntimeElements
 
@@ -253,7 +253,7 @@ Could not determine the dependencies of task ':app:lintVitalReportRelease'.
 
 ```
 
-And so on. Simply put, it tells you that the `sdk` module referenced in `app` defines `Product flavors`, but `app` doesn't define any. When building the `app` module, it doesn't know which `Product flavor` of `sdk` to use. Following this logic, if we define a `product flavor` with the same name in `app`, wouldn't that tell it which `Product flavor` to use?
+And so on.webp Simply put, it tells you that the `sdk` module referenced in `app` defines `Product flavors`, but `app` doesn't define any.webp When building the `app` module, it doesn't know which `Product flavor` of `sdk` to use.webp Following this logic, if we define a `product flavor` with the same name in `app`, wouldn't that tell it which `Product flavor` to use?
 
 #### Same-Name Product Flavors Dependency
 
@@ -266,11 +266,11 @@ productFlavors{
 }
 ```
 
-This tells Gradle to use the `Product flavor` with the same name to depend on the `sdk` module. Their names and `dimensions` must match one-to-one.
+This tells Gradle to use the `Product flavor` with the same name to depend on the `sdk` module.webp Their names and `dimensions` must match one-to-one.webp
 
 #### Different-Name Product Flavors Dependency
 
-However, in some cases, we may not be able to create a `Product flavor` with the same name. In this situation, we need to define a custom matching relationship, which is the `matchingFallbacks` configuration item.
+However, in some cases, we may not be able to create a `Product flavor` with the same name.webp In this situation, we need to define a custom matching relationship, which is the `matchingFallbacks` configuration item.webp
 
 ```kotlin
 flavorDimensions+="sdk"
@@ -282,15 +282,15 @@ productFlavors{
 }
 ```
 
-In the example, we don't have a `hello` type of `Product flavor`, only `helloflavor`. The names don't match, so Gradle can't determine which `Product flavor` to use for building `helloflavor`, and compilation will also fail. So we manually specified `matchingFallbacks` to tell Gradle that if it can't find `helloflavor`, look for `hello`. We know that `sdk` does have `hello`, so the match succeeds and the build passes.
+In the example, we don't have a `hello` type of `Product flavor`, only `helloflavor`.webp The names don't match, so Gradle can't determine which `Product flavor` to use for building `helloflavor`, and compilation will also fail.webp So we manually specified `matchingFallbacks` to tell Gradle that if it can't find `helloflavor`, look for `hello`.webp We know that `sdk` does have `hello`, so the match succeeds and the build passes.webp
 
 #### No Product Flavors Dependency
 
-More likely, we may not need to create `Product flavors` at all. We just want to depend on `hello` in `sdk` but don't want the hassle of creating `Product flavors`. Gradle also provides the `missingDimensionStrategy` configuration item.
+More likely, we may not need to create `Product flavors` at all.webp We just want to depend on `hello` in `sdk` but don't want the hassle of creating `Product flavors`.webp Gradle also provides the `missingDimensionStrategy` configuration item.webp
 
-But although we know the configuration item, since we didn't create `Product flavors`, where should this configuration item be written? Remember I said earlier that `defaultConfig` is equivalent to a `Product flavor`? So we write the configuration item in `defaultConfig`.
+But although we know the configuration item, since we didn't create `Product flavors`, where should this configuration item be written? Remember I said earlier that `defaultConfig` is equivalent to a `Product flavor`? So we write the configuration item in `defaultConfig`.webp
 
-It requires at least two parameters. The first specifies the `dimension`—since `sdk` specifies `sdk`, the first parameter must also be `sdk` to match this dimension. From the second parameter onward, it's the name of the `Product flavor`. For example, if we want `hello`, we pass `hello`. If there's a second library with new `Product flavors`, we need to continue passing a third parameter, which must correspond to the name of the `Product flavor` in the second library.
+It requires at least two parameters.webp The first specifies the `dimension`—since `sdk` specifies `sdk`, the first parameter must also be `sdk` to match this dimension.webp From the second parameter onward, it's the name of the `Product flavor`.webp For example, if we want `hello`, we pass `hello`.webp If there's a second library with new `Product flavors`, we need to continue passing a third parameter, which must correspond to the name of the `Product flavor` in the second library.webp
 
 So the final configuration is:
 
@@ -312,31 +312,31 @@ android {
 
 ### Adding Source Sets
 
-Each `Product flavor` typically has its own icon, name, and even its own code and resources. So it usually creates folders with the same name as the `Product flavor` to customize the product—similar to `Build types`, these are source sets.
+Each `Product flavor` typically has its own icon, name, and even its own code and resources.webp So it usually creates folders with the same name as the `Product flavor` to customize the product—similar to `Build types`, these are source sets.webp
 
 ## Build Variants
 
-`Build variants` are the **product formed by combining one item from each of the previous two categories**, used to represent the final APK. Usually, we can tell from the name what configuration items the product is composed of, because the naming pattern is `<product-flavor><Build-Type>`. For the `sdk` library mentioned earlier, since we created two `Product flavors` and Gradle creates two `Build types` by default, the two are combined, resulting in four `Build variants`:
+`Build variants` are the **product formed by combining one item from each of the previous two categories**, used to represent the final APK.webp Usually, we can tell from the name what configuration items the product is composed of, because the naming pattern is `<product-flavor><Build-Type>`.webp For the `sdk` library mentioned earlier, since we created two `Product flavors` and Gradle creates two `Build types` by default, the two are combined, resulting in four `Build variants`:
 
 + helloDebug
 + helloRelease
 + worldDebug
 + worldRelease
 
-As the final combination, they can also configure source sets, where resources will override those from individual `Build types` or `Product flavors`.
+As the final combination, they can also configure source sets, where resources will override those from individual `Build types` or `Product flavors`.webp
 
-It's worth noting that Android Studio provides a Build Variants tool window, making it convenient for developers to quickly switch between these products. After switching, clicking `Run` will use the selected Build variant for packaging. You can find it in Android Studio's sidebar. If it's not there, you can find it under Menu -> View -> Tool Windows -> Build Variants.
+It's worth noting that Android Studio provides a Build Variants tool window, making it convenient for developers to quickly switch between these products.webp After switching, clicking `Run` will use the selected Build variant for packaging.webp You can find it in Android Studio's sidebar.webp If it's not there, you can find it under Menu -> View -> Tool Windows -> Build Variants.webp
 
 ## Summary
 
-Although these three configuration features share many similarities—they can all use source sets and set environment differentiation options—they are not redundant design. They represent different philosophies and granularities. In actual projects, you should make different choices based on actual situations.
+Although these three configuration features share many similarities—they can all use source sets and set environment differentiation options—they are not redundant design.webp They represent different philosophies and granularities.webp In actual projects, you should make different choices based on actual situations.webp
 
-`Build types` are more focused on release modes, making it easy to isolate development, testing, and release stages. There are usually no major functional differences, so they're suitable for environment-specific settings.
+`Build types` are more focused on release modes, making it easy to isolate development, testing, and release stages.webp There are usually no major functional differences, so they're suitable for environment-specific settings.webp
 
-`Product flavors` are focused on product differences, suitable for situations where multiple products need to be released but share resources. They're essentially a form of product isolation.
+`Product flavors` are focused on product differences, suitable for situations where multiple products need to be released but share resources.webp They're essentially a form of product isolation.webp
 
-`Build variants` are a combination of release modes and product differences, because multiple products also need release mode differentiation.
+`Build variants` are a combination of release modes and product differences, because multiple products also need release mode differentiation.webp
 
-To summarize in one sentence: all three are **used to implement isolation—`Build types` is environment isolation, `Product flavors` is product isolation, and `Build variants` is output isolation**.
+To summarize in one sentence: all three are **used to implement isolation—`Build types` is environment isolation, `Product flavors` is product isolation, and `Build variants` is output isolation**.webp
 
-That's all for today's sharing. I hope you found it helpful!
+That's all for today's sharing.webp I hope you found it helpful!

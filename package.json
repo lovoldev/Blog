@@ -5,14 +5,20 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"postbuild": "pagefind --site build",
 		"preview": "vite preview",
-		"deploy": "wrangler deploy"
+		"deploy": "wrangler deploy",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:links": "node scripts/check-links.mjs",
+		"check:sitemap": "node scripts/check-sitemap.mjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.70.3",
 		"@sveltejs/vite-plugin-svelte": "^7.3.0",
 		"mdsvex": "^0.12.8",
+		"pagefind": "^1.5.2",
+		"sharp": "^0.35.4",
 		"shiki": "^4.4.3",
 		"svelte": "^5.57.0",
 		"svelte-check": "^4.7.6",

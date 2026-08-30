@@ -13,15 +13,15 @@ draft: false
 ## OpenGLES系统
 OpenGLES系统很容易明确的是输出，它的**总是输出颜色值**，从而我们也明确了这个系统的功能——产生颜色值。但是为了实现这个功能，OpenGLES定义了一套规则，能将所有合法的输入，通过适当的转换，产出颜色值。所以从这方面来看，**OpenGLES是一个按一定规则产生颜色值的系统**。
 
-![OpenGLES workflow](/images/posts/opengl-es-drawing-triangles/opengles-workflow.jpeg)
+![OpenGLES workflow](/images/posts/opengl-es-drawing-triangles/opengles-workflow.webp)
 
 这个规则怎么产生呢，虽然我们不知道，但是我们可以根据生活经验猜测：我们的输出是固定的颜色类型，无论最初的输入是什么形式，越靠近输出的状态值就应该会越接近颜色值，不然最终功能肯定无法完成。按照这个推论，如果我们把这个系统划分成多个子系统，前一个子系统输出的值作为后一个子系统的输入，每个子系统都产生某种固定的中间值，那么我们就把复杂的大系统转化为了更简单一些的小系统了。所以一个基本的指导思想就浮出水面，**将系统的转换过程划分为几个阶段，每个阶段又是个独立的子系统，有自己的输入和输出，负责特定的功能，产生特定的值**。
 
-![OpenGLES subsystem](/images/posts/opengl-es-drawing-triangles/opengles-subsystem.jpeg)
+![OpenGLES subsystem](/images/posts/opengl-es-drawing-triangles/opengles-subsystem.webp)
 
 OpenGLES将这种子系统划分称为渲染管线，每个子系统称为着色器，着色器间前后依赖，后一个着色器输入依赖前一个着色器的输出。
 
-![LearnOpenGL盗的图](/images/posts/opengl-es-drawing-triangles/opengles-pipeline.png)
+![LearnOpenGL盗的图](/images/posts/opengl-es-drawing-triangles/opengles-pipeline.webp)
 
 这张图就是这个系统的子系统划分方式，箭头方向就是数据流转方向，上一个系统产生的输出可以供后面系统直接使用。就是靠这种方式，一组顶点数据才能转换成各种颜色。在图的上半部分是关于如何将一组顶点数据转化为坐标信息的，其中关键部分就是顶点着色器，我们可以通过编程来让它接收合适的数据，然后产生有用的输出。至于图的下半部分，关键则是片段着色器，它利用前面产生的坐标信息和中间计算值，生成颜色值。
 
@@ -34,14 +34,14 @@ OpenGLES将这种子系统划分称为渲染管线，每个子系统称为着色
 
 数据存在显存里一直不用肯定不行，于是我们给它安排了一个程序，让程序去读取显存中一组一组的信息，然后组成程序的输入，这就是顶点着色器，并称输入为顶点属性。根据数据形式的不同，顶点着色器会定义不同的属性，也可能会定义片段着色器可能需要的属性作为输出。
 
-![OpenGLES vertex attribute](/images/posts/opengl-es-drawing-triangles/vertex-attribute.jpeg)
+![OpenGLES vertex attribute](/images/posts/opengl-es-drawing-triangles/vertex-attribute.webp)
 
 顶点着色器的魔法在于**坐标变换，如旋转，缩放，平移**等都在这个阶段完成。
 
 ## 片段着色器
 片段着色器的输入可以有两方面，一种是统一变量（uniform），另一种是来自顶点着色器的输出，也就是坐标值。它的主要功能就是输出颜色值。
 
-![OpenGLES fragment](/images/posts/opengl-es-drawing-triangles/fragment.jpeg)
+![OpenGLES fragment](/images/posts/opengl-es-drawing-triangles/fragment.webp)
 
 相比顶点着色器，片段着色器是魔法产生的地方，各种滤镜，特效都是由它完成的。关于它我们先知道它是根据坐标算颜色值的就够了，魔法暂不展开。
 
@@ -51,20 +51,20 @@ OpenGLES将这种子系统划分称为渲染管线，每个子系统称为着色
 ## OpenGLES是怎么画图的
 前面我们铺垫了很多知识，只为了能够画出一个三角形。但是到目前为止，可能很多读者还是一头雾水，因为我一直在搭框架，没有涉及到任何细节。没办法，这一阶段需要接触的新概念太多了，为了不迷糊，我需要将概念先放到合适的位置上，再慢慢展开它的细节。为了再次帮助读者将上面的东西串起来，我们从OpenGL ES画图流程的角度来看一看上面的东西是怎样串起来的。
 
-1. 创建一个着色器程序，获得访问着色器办公室的办事窗口的凭证；
-2. 创建顶点着色器，片段着色器，编写并关联源码；
-3. 利用步骤2中获得的凭证，将步骤3中两个着色器关联到着色器程序上；
-4. 利用步骤2中获得的凭证，设置它关联的顶点属性，填充数据；
-5. 画图。
+1.webp 创建一个着色器程序，获得访问着色器办公室的办事窗口的凭证；
+2.webp 创建顶点着色器，片段着色器，编写并关联源码；
+3.webp 利用步骤2中获得的凭证，将步骤3中两个着色器关联到着色器程序上；
+4.webp 利用步骤2中获得的凭证，设置它关联的顶点属性，填充数据；
+5.webp 画图。
 
 可以看到，着色器程序是扮演着绝对的主角，它作为数据，着色器，绘制的交互接口，所有的操作都围绕它展开。接下来，我将用上面的这些概念模型和上面的流程来深入讲解更多的细节，如果你在细节的海洋中忘记了你的位置，你可以重新查阅这一节，相信它能给你一些提示。
 
 ## 准备工作
 在开始真正的代码实现前，我先假设读者已经阅读过我的上一篇文章，或者了解EGL相关知识，会搭建EGL环境。另外，项目工程也会沿用上一篇中的工程，只是做出以下改动。
 
-1. EGL相关独立成一个文件
-2. OpenGLES独立成一个文件
-3. 使用OpenGLES 3.0 API
+1.webp EGL相关独立成一个文件
+2.webp OpenGLES独立成一个文件
+3.webp 使用OpenGLES 3.0 API
 
 除此之外，我们还有必要准备一下OpenGLES API相关的知识。
 
@@ -153,11 +153,11 @@ GLES30.glEnableVertexAttribArray(0)
 GLES30.glVertexAttribPointer(0,3,GLES30.GL_FLOAT,false,0,buffer)
 ```
 
-1. 第一个参数最简单，就是前面提到的顶点属性的标识。示例中传递了`0`，代表着将数据传递给`aPos`这个顶点属性。
-2. 第二个参数得看顶点着色器中的代码的第二行，`layout (location = 0) in vec3 aPos;`，前半部分的作用我们已经知道了，`in`表示这是一个输入变量，关键在于`vec3`。`vec3`是GLSL的内置类型，可以分为两部分`vec`代表数据是`float`类型，`3`代表三个元素，所以组合起来就表示由三个`float`组成的向量。而第二个参数的含义是顶点属性的组成元素个数。所以答案显而易见，`aPos`是3向量类型，组成元素是`3`。
-3. 第三个和第二个参数其实关联很大。第二个是顶点属性组成个数，第三个是顶点属性组成类型，所以答案已经在第二个参数那里揭晓了，是`float`类型。到这里，我发现前三个类型都只是在**描述顶点属性这个类型**。
-4. 第四个参数决定是否将数据标准化，也就是转为[0,1]区间的数。我们自己的数据已经是[0,1]的数了，所以不转。
-5. 第五个也不好理解。我们先来看示例的数据
+1.webp 第一个参数最简单，就是前面提到的顶点属性的标识。示例中传递了`0`，代表着将数据传递给`aPos`这个顶点属性。
+2.webp 第二个参数得看顶点着色器中的代码的第二行，`layout (location = 0) in vec3 aPos;`，前半部分的作用我们已经知道了，`in`表示这是一个输入变量，关键在于`vec3`。`vec3`是GLSL的内置类型，可以分为两部分`vec`代表数据是`float`类型，`3`代表三个元素，所以组合起来就表示由三个`float`组成的向量。而第二个参数的含义是顶点属性的组成元素个数。所以答案显而易见，`aPos`是3向量类型，组成元素是`3`。
+3.webp 第三个和第二个参数其实关联很大。第二个是顶点属性组成个数，第三个是顶点属性组成类型，所以答案已经在第二个参数那里揭晓了，是`float`类型。到这里，我发现前三个类型都只是在**描述顶点属性这个类型**。
+4.webp 第四个参数决定是否将数据标准化，也就是转为[0,1]区间的数。我们自己的数据已经是[0,1]的数了，所以不转。
+5.webp 第五个也不好理解。我们先来看示例的数据
 
 ```plain
 -0.5f, -0.5f, 1.0f,
@@ -165,13 +165,13 @@ GLES30.glVertexAttribPointer(0,3,GLES30.GL_FLOAT,false,0,buffer)
 0.5f, -0.5f, 1.0f
 ```
 
-由于我们要画三角形，所以需要三个点，每个点由`x`,`y`,`z`组成，所以示例的数据有9个值。而如果我们想在每一个的数据后面加入其他数据，如颜色的`alpha`值，则每个点的数据由3个值变成了4个值，要怎样保证这种情况下，三角形的三个点还是原来的值呢，这就是这个参数的作用。这个参数告诉着色器程序，**传给它的数据该怎样分组**。由于前三个参数已经确定了每个属性读取的数据大小，当读取了这么多数据后，后面的数据理所应当应该是另一组的数据开始。但是其实这组数据还没有完，还有第四个`alpha`值，它的大小要在原来的顶点属性数据大小的基础上加个`1`，这就是这个参数的含义——**除了顶点数据的大小，还需要加上几个值，才是完整的一个分组**。示例里面传了`0`，因为我们每组顶点数据大小就是3个值，没有多余的值。假如加入一个`alpha`值，则传参的时候，这个值应该传`1`.
+由于我们要画三角形，所以需要三个点，每个点由`x`,`y`,`z`组成，所以示例的数据有9个值。而如果我们想在每一个的数据后面加入其他数据，如颜色的`alpha`值，则每个点的数据由3个值变成了4个值，要怎样保证这种情况下，三角形的三个点还是原来的值呢，这就是这个参数的作用。这个参数告诉着色器程序，**传给它的数据该怎样分组**。由于前三个参数已经确定了每个属性读取的数据大小，当读取了这么多数据后，后面的数据理所应当应该是另一组的数据开始。但是其实这组数据还没有完，还有第四个`alpha`值，它的大小要在原来的顶点属性数据大小的基础上加个`1`，这就是这个参数的含义——**除了顶点数据的大小，还需要加上几个值，才是完整的一个分组**。示例里面传了`0`，因为我们每组顶点数据大小就是3个值，没有多余的值。假如加入一个`alpha`值，则传参的时候，这个值应该传`1`.webp
 
-6. 最后一个当然就是具体的值了。这里有两个值得注意的点。一是`ByteBuffer`的必须是通过`allocateDirect`方式创建，二是需调用`order(ByteOrder.nativeOrder())`设置字节序，其余就没啥了。
+6.webp 最后一个当然就是具体的值了。这里有两个值得注意的点。一是`ByteBuffer`的必须是通过`allocateDirect`方式创建，二是需调用`order(ByteOrder.nativeOrder())`设置字节序，其余就没啥了。
 
 终于，最难的部分我们已经闯过去了。目前为止，画图的程序，画图的数据都准备好了，终于可以画三角形了。画图只需要一个指令`GLES30.glDrawArrays(GLES30.GL_TRIANGLES,0,3)`。这个API最关键的参数是第一个，它决定了怎样组织顶点着色器输出的点，是绘制一个一个的点，还是绘制这些点组成的线，还是三点构成的三角形。可以看看不同不同参数下，它们的不同效果
 
-![GL_TRIANGLES](/images/posts/opengl-es-drawing-triangles/opengles-triangle.png) ![GL_LINE_LOOP](/images/posts/opengl-es-drawing-triangles/opengles-line-loop.png)![GL_POINTS](/images/posts/opengl-es-drawing-triangles/opengles-points.png)
+![GL_TRIANGLES](/images/posts/opengl-es-drawing-triangles/opengles-triangle.webp) ![GL_LINE_LOOP](/images/posts/opengl-es-drawing-triangles/opengles-line-loop.webp)![GL_POINTS](/images/posts/opengl-es-drawing-triangles/opengles-points.webp)
 
 可接受的值有这一些， GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLES, GL_TRIANGLE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY, GL_PATCHES，感兴趣的可慢慢研究。
 

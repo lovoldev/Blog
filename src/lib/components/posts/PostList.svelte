@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
 
-  const { posts, readMoreLabel = 'Read More →' } = $props();
+  const { posts, readMoreLabel = 'Read More →', readTimeLabel = 'min read' } = $props();
 
   let visible = $state(false);
   /** @type {HTMLDivElement | null} */
@@ -11,158 +11,140 @@
    * @param {string} dateStr
    */
   function formatDate(dateStr) {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
+    const d = new Date(dateStr);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}.${m}.${day}`;
   }
 
   onMount(() => {
     const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            visible = true;
-          }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) visible = true;
         });
       },
-      { threshold: 0.1 },
+      { threshold: 0.05 }
     );
-
-    if (sectionEl) {
-      observer.observe(sectionEl);
-    }
-
+    if (sectionEl) observer.observe(sectionEl);
     return () => observer.disconnect();
   });
 </script>
 
-<div class="posts-container" bind:this={sectionEl} class:visible={visible}>
+<div class="post-list" bind:this={sectionEl} class:visible>
   {#each posts as post, i}
-    <article class="post-card" style={`animation-delay: ${0.1 + i * 0.1}s`}>
-      <div class="post-meta">
+    <div class="post-item">
+      <a class="post-row" href={`/${post.url}`}>
+        <span class="post-index">{String(i + 1).padStart(2, '0')}</span>
         <span class="post-date">{formatDate(post.date)}</span>
+        <span class="post-title">{post.title}</span>
         {#if post.readTime}
-          <span class="post-readtime">{post.readTime}</span>
+          <span class="post-time">{post.readTime} {readTimeLabel}</span>
         {/if}
-      </div>
-      <h2 class="post-title">{post.title}</h2>
-      {#if post.tags?.length}
-        <div class="post-tags">
-          {#each post.tags as tag}
-            <span class="tag">{tag}</span>
-          {/each}
-        </div>
-      {/if}
-      <p class="post-excerpt">{post.excerpt}</p>
-      <a class="read-more" href={`/${post.url}`}>{readMoreLabel}</a>
-    </article>
+      </a>
+    </div>
   {/each}
 </div>
 
 <style>
-  .posts-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  .post-list {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
   }
 
-  .posts-container.visible {
+  .post-list.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 
-  .post-card {
-    border-top: 1px solid rgba(148, 163, 184, 0.1);
-    padding: 32px;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+  .post-item {
+    position: relative;
   }
 
-  .post-card:hover {
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  .post-row {
+    display: grid;
+    grid-template-columns: 40px 92px 1fr auto;
+    align-items: baseline;
+    gap: 16px;
+    padding: 15px 4px;
+    border: none;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-paper-line);
+    transition: color 0.2s;
   }
 
-  .post-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-    font-size: 0.875rem;
-    color: #cbd5e1;
-    font-family: JetBrains Mono, monospace;
+  .post-row::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-bud);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s ease;
+  }
+
+  .post-row:hover::before {
+    transform: scaleX(1);
+  }
+
+  .post-row:hover {
+    color: var(--color-bud-deep);
+  }
+
+  .post-index {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-bud);
+    opacity: 0.85;
   }
 
   .post-date {
-    color: #fbbf24;
-  }
-
-  .post-readtime {
-    color: #94a3b8;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-ink-faint);
   }
 
   .post-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #f1f5f9;
-    margin: 0 0 10px;
-  }
-
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(56, 189, 248, 0.12);
-    color: #38bdf8;
-    font-size: 0.875rem;
-    border: 1px solid rgba(56, 189, 248, 0.4);
-  }
-
-  .post-excerpt {
-    font-size: 1rem;
-    color: #94a3b8;
-    margin: 0 0 20px;
-    line-height: 1.6;
-  }
-
-  .read-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #38bdf8;
-    text-decoration: none;
+    font-family: var(--font-serif);
+    font-size: 1.12rem;
     font-weight: 500;
-    transition: gap 0.3s ease;
+    line-height: 1.35;
   }
 
-  .read-more:hover {
-    gap: 12px;
+  .post-time {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-ink-faint);
+    white-space: nowrap;
   }
 
   @media (max-width: 767px) {
-    .post-card {
-      padding: 24px;
+    .post-row {
+      grid-template-columns: 32px 1fr;
+      gap: 12px;
     }
 
-    .post-title {
-      font-size: 1.2rem;
+    .post-date {
+      grid-column: 2;
+      grid-row: 1;
+      margin-top: -10px;
     }
 
-    .post-excerpt {
+    .post-time {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-list {
+      opacity: 1;
+      transform: none;
     }
   }
 </style>

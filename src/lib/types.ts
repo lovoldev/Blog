@@ -8,6 +8,12 @@ export interface PostMeta {
 	draft: boolean
 }
 
+export interface TocItem {
+    id: string
+    text: string
+    level: number
+}
+
 export interface Post extends PostMeta {
     slug: string
     lng: string
@@ -17,7 +23,8 @@ export interface Post extends PostMeta {
     jsonLd?: any
     hasAlt?: boolean
     excerpt?: string
-    readTime?: string
+    readTime?: number
+    headings?: TocItem[]
 }
 
 export interface PostRecord {

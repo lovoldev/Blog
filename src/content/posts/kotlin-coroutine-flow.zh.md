@@ -39,7 +39,7 @@ draft: false
 ## 该给Flow换个工作环境了
 上一节，我们那个简单的示例，假如把构造器里面的数据获取方法换成网络请求，应用就歇菜了。因为它们都是运行在主线程里面的。那么这个时候，看过上一篇文章的小伙伴马上就会反应过来，用`withContext`方法在构造器里面切换线程就行了哇。思路是很对，因为`Flow`的默认配置就是构造器和`collect`方法工作在同一线程，既然现在主线程不让运行，那就把构造器的线程切换一下就行了呗。然后事实并不是这样，这样写出来的代码根本无法运行。因为官方提供了唯一的`flowOn`方法来切换构造器的执行线程。使用也很简单，就是对创建好的`Flow`对象配置一次`flowOn`方法就行了。
 ```kotlin
-val flow=["1.jpg","2.jpg"].asFlow()
+val flow=["1.webp","2.webp"].asFlow()
 flow.map { decode(it) }
         .flowOn(Dispatchers.IO)
 viewModelScope.launch {

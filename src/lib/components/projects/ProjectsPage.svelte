@@ -1,35 +1,14 @@
 <script>
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
-  import SectionHeader from '$lib/components/SectionHeader.svelte';
-  import NavButton from '$lib/components/NavButton.svelte';
+  import PageLogo from '$lib/components/PageLogo.svelte';
   import ProjectsList from '$lib/components/projects/Projects.svelte';
-  import { Scene, SunsetBackground } from '$lib/components/visuals/index.js';
-  import { getDictionary,getLink } from '$lib/i18n/index.js';
+  import { getDictionary, getLink } from '$lib/i18n/index.js';
 
   const { lang = 'en' } = $props();
 
   let t = $derived(getDictionary(lang));
-  let visible = $state(false);
-
-  const nextPath = $derived("en"===lang?"/":"/zh");
-
-  onMount(() => {
-    const timer = setTimeout(() => {
-      visible = true;
-    }, 120);
-
-    return () => clearTimeout(timer);
-  });
-
-  /**
-   * @param {MouseEvent} event
-   */
-  function handleNext(event) {
-    event.preventDefault();
-    goto(nextPath);
-  }
+  const homePath = $derived(lang === 'zh' ? '/zh' : '/');
+  const projectList = $derived(t.projects.projects || []);
 </script>
 
 <svelte:head>
@@ -41,88 +20,88 @@
   <link rel="alternate" hreflang="x-default" href="https://zevarc.com/projects" />
 </svelte:head>
 
-<div class="page">
-  <LanguageSwitcher />
+<LanguageSwitcher />
+<PageLogo href={homePath} />
 
-  <Scene
-    backgroundComponent={SunsetBackground}
-    waveProps={{ theme: 'harbor', shimmer: true, shimmerOpacity: 0.2 }}
-    boatProps={{ theme: 'harbor', scale: 0.7, rock: true }}
-    seaClass="sea-slot"
-  >
-    {#snippet skyObjects()}
-      <div class="sunset">
-        <div class="sun"></div>
-      </div>
-    {/snippet}
-  </Scene>
+<main class="projects-page">
+  <header class="page-head">
+    <p class="kicker">{t.nav.projects}</p>
+    <h1 class="page-title">{t.projects.title}</h1>
+    <p class="page-sub">{t.projects.subtitle}</p>
+  </header>
 
-  <section class="content" class:visible={visible}>
-    <SectionHeader station={t.projects.station} title={t.projects.title} subtitle={t.projects.subtitle} />
+  <div class="section-head">
+    <span class="section-label">{t.nav.projects}</span>
+    <span class="section-count">{String(projectList.length).padStart(2, '0')} PCS</span>
+  </div>
 
-    <ProjectsList projects={t.projects.projects} />
-
-    <div class="navigation-section">
-      <NavButton href={nextPath} label={t.projects.next} onClick={handleNext} />
-    </div>
-  </section>
-</div>
+  <ProjectsList projects={projectList} />
+</main>
 
 <style>
-  .page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: hidden;
-  }
-
-  .content {
-    position: relative;
-    z-index: 10;
-    max-width: 960px;
+  .projects-page {
+    max-width: 900px;
     margin: 0 auto;
-    padding: 72px 24px 72px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    color: #f8fafc;
+    padding: 120px clamp(20px, 5vw, 48px) 140px;
   }
 
-  .content.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .page-head {
+    margin-bottom: 56px;
   }
 
-  .sunset {
-    position: absolute;
-    bottom: 20%;
-    right: 20%;
-    width: 80px;
-    height: 80px;
+  .kicker {
+    margin: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-bud);
   }
 
-  .sun {
-    width: 100%;
-    height: 100%;
-    box-shadow: rgba(238, 190, 160, 0.32) 0px 0px 60px;
-    background: radial-gradient(
-      circle,
-      rgb(238, 190, 160) 0%,
-      rgb(214, 170, 128) 50%,
-      transparent 70%
-    );
-    border-radius: 50%;
+  .page-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    letter-spacing: -0.015em;
+    margin: 0 0 12px;
+    color: var(--color-ink);
   }
 
-  .navigation-section {
-    margin-top: 32px;
-    text-align: center;
+  .page-sub {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 0 0 24px;
+    border-bottom: 1px solid var(--color-paper-line);
+    padding-bottom: 12px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-faint);
+  }
+
+  .section-count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-bud);
+    letter-spacing: 0.1em;
   }
 
   @media (max-width: 768px) {
-    .content {
-      padding: 80px 20px 100px;
+    .projects-page {
+      padding-top: 96px;
     }
   }
 </style>

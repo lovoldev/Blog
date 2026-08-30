@@ -1,34 +1,42 @@
 <script>
-import BlogList from "./PostList.svelte";
-    const {title, description,posts} = $props();
+  import BlogList from './PostList.svelte';
+
+  const { title, description, posts, readMoreLabel, readTimeLabel } = $props();
 </script>
+
 <div class="blog-frame">
-    <h3 class="blog-title">{title}</h3>
-    <p class="blog-description">{description}</p>
-    <div class="divider"></div>
-    <BlogList {posts} />
+  <h3 class="blog-title">{title}</h3>
+  <p class="blog-description">{description}</p>
+  <BlogList {posts} {readMoreLabel} {readTimeLabel} />
 </div>
 
 <style>
-.blog-frame {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background: #1e293b99;
-    border: 1px solid rgba(148, 163, 184, 0.1);
-    margin-bottom: 1em;
-}
+  .blog-frame {
+    padding: 24px 28px;
+    background: var(--color-surface-container-low);
+    border: 1px solid var(--color-paper-line);
+    border-radius: 14px;
+    margin-bottom: 36px;
+  }
 
-h3{
-    color: #f8fafc
-}
-
-p{
-    font-size: 1.25rem;
-    color: #e2e8f0;
+  .blog-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--color-ink);
     margin: 0;
-    font-weight: 300;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-}
+  }
+
+  .blog-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+    margin: 8px 0 20px;
+  }
+
+  @media (max-width: 767px) {
+    .blog-frame {
+      padding: 20px;
+    }
+  }
 </style>

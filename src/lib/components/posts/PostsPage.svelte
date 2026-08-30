@@ -1,35 +1,13 @@
 <script>
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
-  import SectionHeader from '$lib/components/SectionHeader.svelte';
-  import NavButton from '$lib/components/NavButton.svelte';
-  import BlogFrame from './PostFrame.svelte';
-  import { Scene, HarborBackground, Moon } from '$lib/components/visuals/index.js';
+  import PageLogo from '$lib/components/PageLogo.svelte';
+  import PostFrame from './PostFrame.svelte';
   import { getDictionary, getLink } from '$lib/i18n/index.js';
 
   const { lang = 'en', posts, notes } = $props();
 
   let t = $derived(getDictionary(lang));
-  let visible = $state(false);
-
-  const projectsPath = $derived(lang === 'zh' ? '/zh/projects' : '/projects');
-
-  onMount(() => {
-    const timer = setTimeout(() => {
-      visible = true;
-    }, 120);
-
-    return () => clearTimeout(timer);
-  });
-
-  /**
-   * @param {MouseEvent} event
-   */
-  function handleNext(event) {
-    event.preventDefault();
-    goto(projectsPath);
-  }
+  const homePath = $derived(lang === 'zh' ? '/zh' : '/');
 </script>
 
 <svelte:head>
@@ -41,75 +19,72 @@
   <link rel="alternate" hreflang="x-default" href="https://zevarc.com/posts" />
 </svelte:head>
 
-<div class="page">
-  <LanguageSwitcher />
+<LanguageSwitcher />
+<PageLogo href={homePath} />
 
-  <Scene
-    backgroundComponent={HarborBackground}
-    backgroundProps={{ showStarField: true, seaGradient: 'linear-gradient(to bottom, #1f3049, #15263a)' }}
-    waveProps={{ theme: 'harbor', shimmer: true, shimmerOpacity: 0.2 }}
-    boatProps={{ theme: 'harbor', scale: 0.7, rock: true }}
-    seaClass="sea-slot"
-  >
-    {#snippet skyObjects()}
-      <Moon />
-    {/snippet}
-  </Scene>
+<main class="posts-page">
+  <header class="page-head">
+    <p class="kicker">{t.nav.posts}</p>
+    <h1 class="page-title">{t.posts.title}</h1>
+    <p class="page-sub">{t.posts.subtitle}</p>
+  </header>
 
-  <main class="content" class:visible={visible}>
-    <SectionHeader station={t.posts.station} title={t.posts.title} subtitle={t.posts.subtitle} />
+  <PostFrame
+    title={t.posts.blogTitle}
+    description={t.posts.blogSubtitle}
+    posts={posts}
+    readMoreLabel={t.posts.readMore}
+    readTimeLabel={t.posts.readTime}
+  />
 
-    <BlogFrame title={t.posts.blogTitle} description={t.posts.blogSubtitle} posts={posts} />
-
-    <BlogFrame title={t.posts.noteTitle} description={t.posts.noteSubtitle} posts={notes} />
-
-    <div class="navigation-section">
-      <NavButton href={projectsPath} label={t.posts.next} onClick={handleNext} />
-    </div>
-  </main>
-</div>
+  <PostFrame
+    title={t.posts.noteTitle}
+    description={t.posts.noteSubtitle}
+    posts={notes}
+    readMoreLabel={t.posts.readMore}
+    readTimeLabel={t.posts.readTime}
+  />
+</main>
 
 <style>
-  .page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: hidden;
-    font-family:
-      "Inter",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      sans-serif;
-    background: linear-gradient(to bottom, #0f172a, #1e3a5f, #0c1929);
-  }
-
-  .content {
-    position: relative;
-    z-index: 10;
+  .posts-page {
     max-width: 800px;
     margin: 0 auto;
-    padding: 80px 24px 120px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all .8s cubic-bezier(.16, 1, .3, 1);
+    padding: 120px clamp(20px, 5vw, 48px) 140px;
   }
 
-  .content.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .page-head {
+    margin-bottom: 56px;
   }
 
-  .navigation-section {
-    margin-top: 60px;
-    text-align: center;
+  .kicker {
+    margin: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-bud);
+  }
+
+  .page-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    letter-spacing: -0.015em;
+    margin: 0 0 12px;
+    color: var(--color-ink);
+  }
+
+  .page-sub {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
   }
 
   @media (max-width: 768px) {
-    .content {
-      padding: 80px 20px 40px;
+    .posts-page {
+      padding-top: 96px;
     }
   }
 </style>

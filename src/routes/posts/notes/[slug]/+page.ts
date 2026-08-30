@@ -1,4 +1,4 @@
-import { loadNotes } from "$lib/posts";
+import { loadNotes, findRelated } from "$lib/posts";
 
 export function entries() {
     const notes = loadNotes('en')
@@ -7,5 +7,6 @@ export function entries() {
 
 export function load({params}) {
     const notes = loadNotes('en')
-    return { post: notes.find(note => note.slug === params.slug) }
+    const note = notes.find(note => note.slug === params.slug)
+    return { post: note, related: note ? findRelated(note, notes) : [] }
 }

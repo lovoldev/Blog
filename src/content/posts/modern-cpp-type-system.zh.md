@@ -37,7 +37,7 @@ int b=a; //新值，存在地址2
 b=2; //改变新值，改变地址2
 //此时a还是1，b变成了2
 ```
-![Pass by value](/images/posts/modern-cpp-type-system/pass-by-value.jpg)
+![Pass by value](/images/posts/modern-cpp-type-system/pass-by-value.webp)
 那假如我们需要修改老值呢，有两种途径，一种是指针，另一种则是引用。
 指针是C/C++里面的魔法，一切皆可指针。指针包含两个方面，一方面它是指一块内存，另一方面它可以指允许对这块内存进行的操作。指针的值是一块内存地址，操作指针，操作的是它指向的那块地址。
 
@@ -47,7 +47,7 @@ int* b=&a; //&代表取地址，从右往左读，取a的地址——地址1，�
 *b=2; //*是解引用，意思是把存在地址2(b)的值取出来，并把那个地址（地址1）的值改成2
 //此时a，*b变成了2
 ```
-![Pass by pointer](/images/posts/modern-cpp-type-system/pass-by-pointer.jpg)
+![Pass by pointer](/images/posts/modern-cpp-type-system/pass-by-pointer.webp)
 引用则是指针的改进版，引用能避免无效引用，不过引用不能重设，比指针缺少一定的灵活性。
 ```cpp
 int a=1; //老值,存在地址1
@@ -55,7 +55,7 @@ int& b=a; //&出现在变量声明的位置，代表该变量是引用变量，�
 b=2; //可以像普通变量一样操作引用变量，同时，对它的操作也会反应到原始对象上
 //此时a，b变成了2
 ```
-![Pass by reference](/images/posts/modern-cpp-type-system/pass-by-reference.jpg)
+![Pass by reference](/images/posts/modern-cpp-type-system/pass-by-reference.webp)
 ## 变量定义
 类型仅仅是一种语法定义，而要真正使用这种定义，我们需要用类型来定义变量，即变量定义。
 C++变量定义是以下形式：
@@ -74,10 +74,10 @@ constexpr int f=a+e; //constexpr代表这个变量需要在编译期求值，并
 以上，基本就是变量定义的所有形式了，类型确定了变量的基本属性，而限定符限定了变量的使用范围。
 定义变量也是按照这个步骤进行，**首先确定我们需要什么类型的变量，其次再进一步确定是否需要对这个变量添加限定，很多时候是需要的**。可以按以下步骤来确定添加什么样的限定符：
 
-1. 是个大对象，可以考虑把变量声明成引用类型。通常引用类型是比指针类型更优的选择。
-2. 大对象可能需要被重置，可以考虑声明为指针。
-3. 只想要个常量，添加`constexpr`。
-4. 只想读这个变量，添加`const`。
+1.webp 是个大对象，可以考虑把变量声明成引用类型。通常引用类型是比指针类型更优的选择。
+2.webp 大对象可能需要被重置，可以考虑声明为指针。
+3.webp 只想要个常量，添加`constexpr`。
+4.webp 只想读这个变量，添加`const`。
 ## 变量初始化
 变量定义往往伴随着初始化，这对于局部变量来说很重要，因为局部变量的初值是不确定的，在没有对变量进行有效初始化前就使用变量，会导致不可控的问题。所以严格来说，前面的变量定义是不完全正确的。
 C++11推出了全新的，统一的初始化方式，即在变量名后面跟着大括号，大括号里包着初始化的值。这种方式可以用在任何变量上，称之为统一初始化，如：
@@ -158,7 +158,7 @@ struct Computer{
 
 void boot(Computer& c){
     c.booted=true;
-    std::cout<<"Booting...";
+    std::cout<<"Booting...webp";
 }
 
 void compute(const Computer& c){
@@ -169,7 +169,7 @@ void compute(const Computer& c){
 
 void shutdown(Computer& c){
     c.booted=false;
-    std::cout<<"Shutdown...";
+    std::cout<<"Shutdown...webp";
 }
 
 int main(void){
@@ -192,7 +192,7 @@ struct Computer{
 
     void boot(){
         booted=true;
-        std::cout<<"Booting...";
+        std::cout<<"Booting...webp";
     }
 
     void compute(){
@@ -203,7 +203,7 @@ struct Computer{
 
     void shutdown(){
         booted=false;
-        std::cout<<"Shutdown...";
+        std::cout<<"Shutdown...webp";
     }
 };
 

@@ -23,7 +23,22 @@ export const en = {
     noteTitle: 'Notes',
     noteSubtitle: 'Fragments of what I see, think, and reflect on',
     readMore: 'Read More →',
+    readTime: 'min read',
+    toc: 'Contents',
+    related: 'Related Posts',
+    latest: 'Latest Writing',
     next: 'Head to the Dock',
+  },
+  nav: {
+    home: 'Home',
+    posts: 'Posts',
+    projects: 'Projects',
+  },
+  search: {
+    title: 'Search',
+    placeholder: 'Search posts & notes…',
+    empty: 'No results found',
+    hint: 'Search is available after build (pnpm build)',
   },
   projects: {
     station: 'Second Station',
@@ -36,7 +51,7 @@ export const en = {
         title: 'FastAir',
         year: '2017',
         description: 'An Android app for fast file transfer without an internet connection',
-        image: '/projects/fastair.png',
+        image: '/projects/fastair.webp',
         tags: [
           'Android',
           'WiFi P2P'
@@ -73,7 +88,7 @@ export const en = {
         id: 4,
         title: 'BoredIsland',
         year: '2026',
-        description: 'Escape the noise. Drag to explore a quiet, endless ocean, skip stones, watch the fish, and discover hidden islands.',
+        description: 'Escape the noise.webp Drag to explore a quiet, endless ocean, skip stones, watch the fish, and discover hidden islands.',
         image: '/projects/boredisland.svg',
         tags: [
           'Bored Island',

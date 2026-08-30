@@ -63,12 +63,12 @@ android {
 
 `debug`和`release`有着相同的配置项，只是取值不同，如
 
-1. `isDebuggable=true`使得`debug`下可以使用调试器;
-2. `isMinifyEnabled=false`不进行代码缩减，这会使得该模式下有安装包体积更大，如果为`true`则会移除没有使用到的类和方法，在使用反射时应注意;
-3. `isShrinkResources=false`不进行资源缩减，使得无用的资源也被打包进安装包；
-4. `versionNameSuffix+=".debug"`可以方便从版本信息中知道使用的是哪种发布模式；
-5. `applicationIdSuffix+=".debug"`可以配置应用ID后缀，使得在同一手机上安装多种发布包；
-6. `addManifestPlaceholders(mapOf("key" to "value"))`为`AndroidManifests.xml`添加配置。
+1.webp `isDebuggable=true`使得`debug`下可以使用调试器;
+2.webp `isMinifyEnabled=false`不进行代码缩减，这会使得该模式下有安装包体积更大，如果为`true`则会移除没有使用到的类和方法，在使用反射时应注意;
+3.webp `isShrinkResources=false`不进行资源缩减，使得无用的资源也被打包进安装包；
+4.webp `versionNameSuffix+=".debug"`可以方便从版本信息中知道使用的是哪种发布模式；
+5.webp `applicationIdSuffix+=".debug"`可以配置应用ID后缀，使得在同一手机上安装多种发布包；
+6.webp `addManifestPlaceholders(mapOf("key" to "value"))`为`AndroidManifests.xml`添加配置。
 
 诸如此类，更多配置项可查看[官方文档](https://developer.android.google.cn/reference/tools/gradle-api/7.3/com/android/build/api/dsl/BuildType)。
 
@@ -99,7 +99,7 @@ android {
 
 当你创建完后，Android Studio会在文件标签页下方提示你项目需要同步，点击`Sync Now`按钮，同步完成后，你可以在侧边工具中中找到`Build Variants`工具窗口，这时候，`Active Build Variant`中就会多一个`alpha`的构建选项
 
-![build variant preview](/images/posts/gradle-build-variants/build-variant-preview.png)
+![build variant preview](/images/posts/gradle-build-variants/build-variant-preview.webp)
 
 这就是告诉你，你可以发布`alpha`环境的包了。
 
@@ -108,11 +108,11 @@ android {
 ### 使用源代码集
 Gradle除了提供配置项来配置环境，还提供了源代码集功能来区分资源，源代码集提供单独配置某个`Build types`的能力。通常一个module会在`src`目录下创建一个`main`目录，在该目录下存放代码和资源，我们称之为主源代码集。当我们希望`Build types`之间有所不同，要配置不同资源时，就可以**在**`**src**`**目录下创建和**`**Build types**`**同名的变种目录，称之为变种源代码集，它们的结构是完全相同的，可以存放变种特有的代码和资源**，在编译时，Gradle会把两个源代码集中的资源和代码放在一起编译，好像就是在同一个目录下一样。如我希望让应用在不同的环境下显示不同的应用名称或者图标，就可以使用源代码集功能实现。
 
-1. 首先，我们需要确定目标模块，实例中目标模块是`app`;
-2. 然后，我们进入到目标模块的`src`目录；
-3. 接着以`src`为父目录，新建和`Build type`名字一一对应的文件夹，如`debug`环境，就新建`debug`文件夹；
-4. 参考`main`文件结构，配置想区分的资源；
-5. 同步
+1.webp 首先，我们需要确定目标模块，实例中目标模块是`app`;
+2.webp 然后，我们进入到目标模块的`src`目录；
+3.webp 接着以`src`为父目录，新建和`Build type`名字一一对应的文件夹，如`debug`环境，就新建`debug`文件夹；
+4.webp 参考`main`文件结构，配置想区分的资源；
+5.webp 同步
 
 下面就是修改`alpha`和`release`模式下，应用名称的一个实例
 
@@ -136,8 +136,8 @@ app
 
 `strings.xml`定义了三个键相同，值不同的字符串资源，下面就是`alpha`,`release`环境下的运行效果。
 
-![build alpha](/images/posts/gradle-build-variants/build-alpha.png) 
-![build release](/images/posts/gradle-build-variants/build-release.png)
+![build alpha](/images/posts/gradle-build-variants/build-alpha.webp) 
+![build release](/images/posts/gradle-build-variants/build-release.webp)
 
 当然，除了这些普通资源，代码也可以配置，只需要在上面目录结构的基础上，加上`java`目录，然后在对应包下添加文件，就好像直接写在`main`目录下的包中一样，只不过这些类只在目标构建类型和目录匹配时才会生效。
 
@@ -200,8 +200,8 @@ android{
 ### 创建Product flavor
 创建`Product flavor`的第一步是用`flavorDimensions.add("sdk")`为`Product flavor` 指定一个dimensions，也就是起个名字。这一步很重要，不然会在编译时报错
 `
-Error:All flavors must now belong to a named flavor dimension.
-The flavor 'flavor_name' is not assigned to a flavor dimension.
+Error:All flavors must now belong to a named flavor dimension.webp
+The flavor 'flavor_name' is not assigned to a flavor dimension.webp
 `
 起好名字后，我们就可以使用`productFlavors`构建块创建`Product flavors`了。
 
@@ -222,17 +222,17 @@ productFlavors {
 在没有配置`Product flavors`情况下，我们引用本地module就直接`implementation(project(":sdk"))`就行，但是创建了`Product flavors`后，你再看，就报错了
 
 ```shell
-Could not determine the dependencies of task ':app:lintVitalReportRelease'.
+Could not determine the dependencies of task ':app:lintVitalReportRelease'.webp
 
-> Could not resolve all task dependencies for configuration ':app:releaseRuntimeClasspath'.
+> Could not resolve all task dependencies for configuration ':app:releaseRuntimeClasspath'.webp
 
-   > Could not resolve project :sdk.
+   > Could not resolve project :sdk.webp
 
      Required by:
 
          project :app
 
-      > The consumer was configured to find a component for use during runtime, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.1.0', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm'. However we cannot choose between the following variants of project :sdk:
+      > The consumer was configured to find a component for use during runtime, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.1.0', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm'.webp However we cannot choose between the following variants of project :sdk:
 
           - helloReleaseRuntimeElements
 

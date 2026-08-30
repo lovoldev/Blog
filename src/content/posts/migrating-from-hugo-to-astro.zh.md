@@ -8,10 +8,10 @@ draft: false
 ---
 经过一周多的努力，终于把Hugo迁移到了Astro，并且可以正常访问了。这中间踩了很多坑，在此记录一下，希望对大家有所帮助。
 ## 网站预览
-![home](/images/posts/migrating-from-hugo-to-astro/home.png)
-![posts](/images/posts/migrating-from-hugo-to-astro/posts.png)
-![tabs](/images/posts/migrating-from-hugo-to-astro/tabs.png)
-![content](/images/posts/migrating-from-hugo-to-astro/content.png)
+![home](/images/posts/migrating-from-hugo-to-astro/home.webp)
+![posts](/images/posts/migrating-from-hugo-to-astro/posts.webp)
+![tabs](/images/posts/migrating-from-hugo-to-astro/tabs.webp)
+![content](/images/posts/migrating-from-hugo-to-astro/content.webp)
 
 ## 缘起
 之前的博客一直用Hugo生成，前前后后找了很久的主题，Hugo和主题文档反复看了好几遍终于将博客折腾上线了。上线后由于很久没更新博客，前不久更新了一篇，发现Hugo生成又失败了。于是又去Hugo官方查，发现Hugo更新了很多版本，有些特性去掉了或者优化了。无奈只能重新按照说明修改配置。配置修改后，发现还是生成失败，于是又去主题文档上查询了一波，发现主题并没有适配最新的0.138。无奈只能修改主题，同时更新了一下主题仓库。这一折腾不要紧，折腾后发现时间没有了，很多地方的样式也变了。当前要紧的是先把时间加上，折腾了一会，发现都不是很满意。于是起了重新找主题的想法。找了一圈下来，不是这里不满意就是那里不满意。于是心一横，想着直接换生成工具。这就找到了Astro。
@@ -32,7 +32,7 @@ draft: false
 pnpm create astro@latest -- --template blog
 ```
 命令开始执行后，工具会让你做一些交互，用于配置项目。其中我觉得需要注意的是Git配置这个，因为我们是迁移，希望还保存以前的提交记录，所以选择不新建Git仓库。稍后我们将使用原来的博客仓库来替代。我的配置选择如下
-![create astro project](/images/posts/migrating-from-hugo-to-astro/create-astro-project.png)
+![create astro project](/images/posts/migrating-from-hugo-to-astro/create-astro-project.webp)
 等待工具执行结束，根据它的提示，直接去到项目根地址，执行`pnpm dev`命令，点击链接地址，就可以在浏览器上看到博客效果了。后续我们更改内容时也是一直保持`pnpm dev`运行，可以及时看到哪些内容有问题。同时，在配置项目的时候，我们也本着效果第一点的原则，先修改内容，再修改样式。如果你坚持到这里，那么，我们就成功走完了第一步，让我们继续。
 ## 复制原始博客内容
 首先，让我们来看一看目前的项目结构。
@@ -91,7 +91,7 @@ static      =>  public
 content     =>  src/content
 ```
 做完这几步，我们的旧博客部分就全部迁移过来了，只是没有任何原来的样式了。这时，假如你开着开发模式，并且看到控制台，你就会发现它报错了，提示找不到`posts`目录。
-![can't find posts](/images/posts/migrating-from-hugo-to-astro/cant-find-posts.png)
+![can't find posts](/images/posts/migrating-from-hugo-to-astro/cant-find-posts.webp)
 因为此时我的`content`目录如下
 ```bash
 content
@@ -132,7 +132,7 @@ export const collections = { posts,about };
 ```
 `defineCollection`函数接收一个对象，对象中有两个属性，`loader`和`schema`。`loader`是一个函数，用于告诉它去哪里，找什么文件，`schema`是一个Zod对象，用于校验Markdown文件的frontmatter。原来Hugo的Markdown文件中刚好就有这些信息，我们只需要确定这些数据的格式就可以了。
 如果一切顺利，那么现在Markdown文件已经导入到项目里了。但是如果某一个Markdown文件的frontmatter格式不正确，就会报错，如下。
-![invalid frontmatter](/images/posts/migrating-from-hugo-to-astro/invalid-format.png)
+![invalid frontmatter](/images/posts/migrating-from-hugo-to-astro/invalid-format.webp)
 就对着路径一个一个改就行，如果实在太多，就在上面的`src/content.config.ts`中直接去掉验证就好。
 ## 访问Markdown文件
 上一步虽然我们已经导入了Markdown文件，但是现在我们访问不了，因为还没有路由，也就是Astro不知道输入某个地址后它该去哪里找显示的页面，显示的页面也不知道该使用哪一个Markdown文件。所以接下来为了能看到我们的文章，我们需要做两步：路由配置，页面配置。
@@ -189,8 +189,8 @@ const post = Astro.props;
 ## 国际化
 ### 路由
 由于之前到博客有英文版本，所以国际化支持是必不可少的。虽然目前只有中英两种语言，但是考虑后面的变化，我还是没使用[官方文档](https://docs.astro.build/zh-cn/guides/internationalization/)中的方法。官方文档中国际化方式只有两种方法可以选择：
-1. 使用默认语言+其他语言的形式，这种形式的优点是，完美匹配我之前Hugo的路由格式，缺点是会存在两个基本相同的文件，分散在不同的目录中。
-2. 所有语言都使用相同的文件，但是当访问不带语言前缀的地址时，会发生404错误。
+1.webp 使用默认语言+其他语言的形式，这种形式的优点是，完美匹配我之前Hugo的路由格式，缺点是会存在两个基本相同的文件，分散在不同的目录中。
+2.webp 所有语言都使用相同的文件，但是当访问不带语言前缀的地址时，会发生404错误。
 这两种方法都各有优缺点，但是和我预想的还是有区别。首先我希望所有的多语言文件都只存在一份，通过数据来反应多语言。其实我想中文去掉默认的语言前缀。通过摸索，我找到了`Astro.rewrite`。
 首先使用官方的方法2，我创建了`src/pages/[lng]`目录，在目录下新建`index.astro`文件，作为博客的家页面。所以，为了支持中文和英文，我需要在`getStaticPaths`返回语言数组，让Astro为对应的语言生成路由。
 ```astro
@@ -273,7 +273,7 @@ pnpm astro add tailwind
 	:root {
 		--md-sys-color-primary: rgb(27 101 133);
 		--md-sys-color-surface-tint: rgb(27 101 133);
-        ...
+        ...webp
     }
  }
 ```
@@ -287,7 +287,7 @@ pnpm astro add tailwind
 	:root {
 		--md-sys-color-primary: rgb(27 101 133);
 		--md-sys-color-surface-tint: rgb(27 101 133);
-        ...
+        ...webp
     }
     :root .dark {
         --md-sys-color-primary: rgb(143 206 243);
@@ -345,8 +345,8 @@ export async function getStaticPaths({ paginate }) {
 如果你有看得不明白的地方，欢迎到 https://github.com/zevarc/Blog 查看我对应的源码。我尽可能地减少了封装，保证了代码的纯粹度。
 
 ## 参考
-1. [Astro](https://docs.astro.build/)
-2. [Material you](https://m3.material.io)
-2. [Material theme builder](https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder)
-2. [Tailwind CSS](https://tailwindcss.com/)
-3. [源码](https://github.com/zevarc/Blog)
+1.webp [Astro](https://docs.astro.build/)
+2.webp [Material you](https://m3.material.io)
+2.webp [Material theme builder](https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder)
+2.webp [Tailwind CSS](https://tailwindcss.com/)
+3.webp [源码](https://github.com/zevarc/Blog)
