@@ -7,7 +7,8 @@
 		"build": "vite build",
 		"postbuild": "pagefind --site build",
 		"preview": "vite preview",
-		"deploy": "wrangler deploy",
+		"deploy": "wrangler deploy && node scripts/notify-indexnow.mjs",
+		"notify:indexnow": "node scripts/notify-indexnow.mjs",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:links": "node scripts/check-links.mjs",
 		"check:sitemap": "node scripts/check-sitemap.mjs"
