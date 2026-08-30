@@ -109,6 +109,19 @@ export const en = {
         ],
         website: 'https://loglet.zevarc.com',
         github: 'https://github.com/zevarc/loglet'
+      },
+      {
+        id: 6,
+        title: 'Pinyfy',
+        year: '2026',
+        description: 'Turn Chinese into pinyin instantly — tone marks, numbers, or none; create pinyin images and explore phrases.',
+        image: '/projects/pinyfy.svg',
+        tags: [
+          'Pinyin',
+          'Chinese',
+          'Tools',
+        ],
+        github: 'https://github.com/zevarc/PinyinK'
       }
     ]
   },

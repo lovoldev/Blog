@@ -108,6 +108,19 @@ export const zh = {
         ],
         website: 'https://loglet.zevarc.com',
         github: 'https://github.com/zevarc/loglet'
+      },
+    {
+        id: 6,
+        title: 'Pinyfy',
+        year: '2026',
+        description: '输入中文实时转拼音，支持声调符号/数字/无三种模式，可生成拼音图片并探索中文短语。',
+        image: '/projects/pinyfy.svg',
+        tags: [
+          'Pinyin',
+          '中文',
+          '工具',
+        ],
+        github: 'https://github.com/zevarc/PinyinK'
       }
     ]
   },
